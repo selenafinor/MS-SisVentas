@@ -64,6 +64,13 @@ export class PermisoService {
         }
       }
 
-
+       deletePermiso(id: number): Observable<void> {
+       const token = sessionStorage.getItem('token');
+        if (!token) return of(undefined);
+       return this.http
+       .delete<void>(`${this.apiUrl}/${id}`, httpOptions(token))
+       .pipe(catchError(this.handleError<void>('deletePermiso')));
+}
 
 }
+

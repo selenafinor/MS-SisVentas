@@ -1,12 +1,13 @@
-﻿using MSVenta.Seguridad.Models;
+﻿using MSVenta.Seguridad.DTOs;
+using MSVenta.Seguridad.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace MSVenta.Seguridad.Services
 {
     public interface IRolService
     {
         Task<IEnumerable<Rol>> GetAllRoles();
+        Task<IEnumerable<RolDTO>> GetAllRolesConPermisos();
         Task<Rol> GetRolById(int id);
         Task<Rol> CreateRol(Rol rol);
         Task UpdateRol(Rol rol);

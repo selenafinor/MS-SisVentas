@@ -70,7 +70,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/roles/{id}",
-      "UpstreamHttpMethod": [ "Delete", "Get" ],
+      "UpstreamHttpMethod": [ "Delete", "Get", "Put" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "SECURITY-TOKEN",
         "AllowedScopes": []
@@ -695,6 +695,22 @@
       ],
       "UpstreamPathTemplate": "/api/Articulo/upload/{id}",
       "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/roles/conpermisos",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/roles/conpermisos",
+      "UpstreamHttpMethod": [ "Get" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "SECURITY-TOKEN",
         "AllowedScopes": []

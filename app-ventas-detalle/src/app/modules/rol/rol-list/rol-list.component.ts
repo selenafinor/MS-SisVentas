@@ -1,70 +1,66 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { Rol } from '../../../interfaces/rol.interface';
-import { RolService } from '../rol.service';
-import Swal from 'sweetalert2';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { RolService } from '../rol.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-rol-list',
-  imports: [
-    CommonModule,
-    RouterModule,
-  ],
+  imports: [CommonModule, RouterModule],
   templateUrl: './rol-list.component.html',
   styleUrl: './rol-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RolListComponent {
-  @Input() public roles: Rol[] = [];
+  @Input() public roles: any[] = [];
+  @Output() recargar = new EventEmitter<void>();
 
   constructor(
     private rolesService: RolService,
     private cdr: ChangeDetectorRef,
-    private router:Router
+    private router: Router
   ) {}
 
-  deleteRol(rol_id: number): void {
-    this.rolesService.deleteRol(rol_id).subscribe({
-      next: () => {
-        Swal.fire({
-          icon: 'success',
-          title: '¡Eliminado!',
-          text: 'El rol ha sido eliminado exitosamente.',
-          confirmButtonText: 'OK',
-        }).then(() => {
-          // Recargar la lista de productos
-          this.reloadRoles();
+  cambiarEstado(rol: any): void {
+    const nuevoEstado = rol.estado === 'activo' ? 'inactivo' : 'activo';
+    const accion = nuevoEstado === 'inactivo' ? 'desactivar' : 'activar';
+
+    Swal.fire({
+      title: `¿${accion} este rol?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: `Sí, ${accion}`,
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const rolActualizado = {
+          iD_Rol: rol.iD_Rol,
+          nombre_Rol: rol.nombre_Rol,
+          descripcion: rol.descripcion,
+          estado: nuevoEstado
+        };
+        this.rolesService.updateRol(rol.iD_Rol, rolActualizado).subscribe({
+          next: () => {
+            rol.estado = nuevoEstado;
+            this.cdr.markForCheck();
+            Swal.fire('¡Listo!', `Rol ${accion}do correctamente.`, 'success');
+          },
+          error: (err) => console.error(err),
         });
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error(err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Hubo un problema al eliminar el rol. Inténtalo de nuevo.',
-          confirmButtonText: 'Entendido',
-        });
-        this.cdr.markForCheck();
-      },
+      }
     });
   }
+
+  asignarPermiso(rol: any): void {
+  console.log('Rol:', rol);
+  this.router.navigate(['/dashboard/roles/rolpermiso', rol.iD_Rol]);
+}
 
   reloadRoles(): void {
-    this.rolesService.getRoles().subscribe({
-      next: (roles) => {
-        this.roles = roles; // Actualiza la lista de productos
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error(err);
-        this.cdr.markForCheck();
-      },
-    });
+    this.recargar.emit();
   }
 
-  createRole():void{
+  createRole(): void {
     this.router.navigate(['/dashboard/roles/add']);
   }
 }

@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
-import { routes } from '../../../app.routes';
 import { Rol } from '../../../interfaces/rol.interface';
 import { Permiso } from '../../../interfaces/permiso.interface';
 import { User } from '../../../interfaces/user.interface';
@@ -17,30 +16,25 @@ export class DashboardLayoutComponent implements OnInit {
   public userPermissions: Permiso[] = [];
   user: User | undefined;
 
-  // Menú general
   generalRoutes = [
-    { path: 'user', title: 'Usuarios', icon: 'pi pi-users', permission: 'Usuario' },
-    { path: 'roles', title: 'Roles', icon: 'pi pi-shield', permission: 'Rol' },
-    { path: 'roles-permisos', title: 'Permisos', icon: 'pi pi-key', permission: 'Rol Permiso' },
-    { path: 'roles-permisos-usuario', title: 'Asig. Roles', icon: 'pi pi-user-plus', permission: 'Asignacion Roles y Permisos' },
+    { path: 'user', title: 'Usuarios', icon: 'pi pi-users', permission: 'gestionar_usuarios' },
+    { path: 'roles', title: 'Roles', icon: 'pi pi-shield', permission: 'gestionar_roles' },
+    { path: 'permisos', title: 'Permisos', icon: 'pi pi-key', permission: 'gestionar_permisos' },
   ];
 
-  // Módulo Inventario
   inventarioRoutes = [
-    { path: 'articulo', title: 'Artículos', permission: 'Articulo' },
-    { path: 'almacen', title: 'Almacenes', permission: 'Almacen' },
-    { path: 'ingreso', title: 'Ingresos', permission: 'Ingreso' },
-    { path: 'egreso', title: 'Egresos', permission: 'Egreso' },
-    { path: 'traspaso', title: 'Traspasos', permission: 'Traspaso' },
+    { path: 'articulo', title: 'Artículos', permission: 'gestionar_inventario' },
+    { path: 'almacen', title: 'Almacenes', permission: 'gestionar_inventario' },
+    { path: 'ingreso', title: 'Ingresos', permission: 'gestionar_inventario' },
+    { path: 'egreso', title: 'Egresos', permission: 'gestionar_inventario' },
+    { path: 'traspaso', title: 'Traspasos', permission: 'gestionar_inventario' },
   ];
 
-  // Módulo Ventas
   ventasRoutes = [
-    { path: 'customer', title: 'Clientes', permission: 'Cliente' },
-    { path: 'sale', title: 'Ventas', permission: 'Venta' },
+    { path: 'customer', title: 'Clientes', permission: 'gestionar_ventas' },
+    { path: 'sale', title: 'Ventas', permission: 'gestionar_ventas' },
   ];
 
-  // Módulo Compras (futuro)
   comprasRoutes: any[] = [];
 
   inventarioOpen = false;

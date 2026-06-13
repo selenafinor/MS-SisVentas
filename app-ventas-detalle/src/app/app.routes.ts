@@ -36,6 +36,12 @@ export const routes: Routes = [
         data: { icon: 'pi pi-users', title: 'Asignacion de Roles a Usuarios', description: 'Gestion de Asignacion de Roles a los Usuario', permission: 'Asignacion Roles y Permisos' }
       },
       {
+        path: 'permisos',
+          loadChildren: () =>
+           import('./modules/permisos/permiso.route').then(m => m.permisos_routes),
+        data: { icon: 'pi pi-key', title: 'Permisos', description: 'Gestion de Permisos', permission: 'Permiso' }
+      },
+      {
         path: 'customer',
         loadChildren: () =>
           import('./modules/customer/customer.route').then(m => m.customer_routes),

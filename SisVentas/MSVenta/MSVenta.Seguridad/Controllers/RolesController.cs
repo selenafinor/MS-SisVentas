@@ -3,6 +3,8 @@ using MSVenta.Seguridad.Models;
 using MSVenta.Seguridad.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MSVenta.Seguridad.DTOs;
+
 
 namespace MSVenta.Seguridad.Controllers
 {
@@ -42,6 +44,12 @@ namespace MSVenta.Seguridad.Controllers
         {
             await _rolService.DeleteRol(id);
             return NoContent();
+        }
+        [HttpGet("conpermisos")]
+        public async Task<ActionResult<IEnumerable<RolDTO>>> GetRolesConPermisos()
+        {
+            var roles = await _rolService.GetAllRolesConPermisos();
+            return Ok(roles);
         }
         public IActionResult Index()
         {
