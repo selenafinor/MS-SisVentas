@@ -1,0 +1,51 @@
+<div class="p-6 mt-10 bg-gradient-to-br from-gray-900 via-black to-blue-900 text-white rounded-2xl shadow-2xl border border-blue-500/30">
+  <h2 class="text-3xl font-extrabold mb-8 text-center bg-gradient-to-r from-blue-400 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
+    Editar Almacén
+  </h2>
+
+  <div class="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
+    <div class="flex flex-col gap-1">
+      <label class="text-sm text-gray-400">Nombre *</label>
+      <input [(ngModel)]="almacen.nombre" type="text"
+        class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm text-gray-400">Descripción</label>
+      <input [(ngModel)]="almacen.descripcion" type="text"
+        class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm text-gray-400">Dirección</label>
+      <input [(ngModel)]="almacen.direccion" type="text"
+        class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm text-gray-400">Capacidad Máx</label>
+      <input [(ngModel)]="almacen.cantidadMax" type="number"
+        class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm text-gray-400">Estado</label>
+      <select [(ngModel)]="almacen.estado"
+        class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500">
+        <option value="activo">Activo</option>
+        <option value="inactivo">Inactivo</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="flex justify-center gap-4 mt-8">
+    <button (click)="guardar()"
+      class="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow-md transition">
+      Guardar Cambios
+    </button>
+    <button (click)="cancelar()"
+      class="px-6 py-2 bg-gray-600 hover:bg-gray-500 text-white font-semibold rounded-lg shadow-md transition">
+      Cancelar
+    </button>
+  </div>
+</div>

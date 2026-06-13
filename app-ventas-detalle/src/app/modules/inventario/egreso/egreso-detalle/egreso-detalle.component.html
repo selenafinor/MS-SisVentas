@@ -1,0 +1,60 @@
+<div class="p-6 mt-10 bg-gradient-to-br from-gray-900 via-black to-blue-900 text-white rounded-2xl shadow-2xl border border-blue-500/30">
+
+  <div class="flex items-center mb-8 gap-4">
+    <button (click)="volver()"
+      class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition">
+      ← Volver
+    </button>
+    <h2 class="text-4xl font-extrabold bg-gradient-to-r from-blue-400 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
+      Detalle de Egreso
+    </h2>
+  </div>
+
+  <div *ngIf="egreso" class="bg-gray-800/60 rounded-xl p-6 mb-8 border border-gray-700 grid grid-cols-2 gap-4">
+    <div>
+      <p class="text-gray-400 text-sm">Fecha</p>
+      <p class="text-white font-semibold">{{ egreso.fecha | date:'dd/MM/yyyy' }}</p>
+    </div>
+    <div>
+      <p class="text-gray-400 text-sm">Motivo</p>
+      <p class="text-white font-semibold">{{ egreso.motivo }}</p>
+    </div>
+    <div>
+      <p class="text-gray-400 text-sm">Glosa</p>
+      <p class="text-white font-semibold">{{ egreso.glosa }}</p>
+    </div>
+    <div>
+      <p class="text-gray-400 text-sm">Usuario</p>
+      <p class="text-white font-semibold">{{ username }}</p>
+    </div>
+    <div>
+      <p class="text-gray-400 text-sm">Estado</p>
+      <span [ngClass]="egreso.estado === 'activo' ? 'text-green-400 font-semibold' : 'text-red-400 font-semibold'">
+        {{ egreso.estado }}
+      </span>
+    </div>
+  </div>
+
+  <h3 class="text-2xl font-bold mb-4 text-cyan-400">Artículos</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full table-auto text-sm text-center bg-gray-900/80 rounded-xl shadow-xl border border-gray-700">
+      <thead>
+        <tr class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
+          <th class="px-5 py-2 text-left">Artículo</th>
+          <th class="px-5 py-2 text-left">Almacén</th>
+          <th class="px-5 py-2 text-left">Cantidad</th>
+          <th class="px-5 py-2 text-left">Observación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detalle of detalles"
+          class="hover:bg-gray-800 transition-colors border-b border-gray-700">
+          <td class="px-6 py-4">{{ detalle.articuloAlmacen?.articulo?.nombre || detalle.id_ArticuloAlmacen }}</td>
+          <td class="px-6 py-4">{{ detalle.articuloAlmacen?.almacen?.nombre || '-' }}</td>
+          <td class="px-6 py-4">{{ detalle.cantidad }}</td>
+          <td class="px-6 py-4">{{ detalle.observacion }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

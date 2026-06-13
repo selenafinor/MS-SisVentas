@@ -1,0 +1,708 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/auth",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/token",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/usuario",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/usuario",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/usuario/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/usuario/{id}",
+      "UpstreamHttpMethod": [ "Delete", "Get", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/roles",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/roles",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/roles/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/roles/{id}",
+      "UpstreamHttpMethod": [ "Delete", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/permiso",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/permiso",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/rolpermisos",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/rolpermisos",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/rolpermisos/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/rolpermisos/{id}",
+      "UpstreamHttpMethod": [ "Delete", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/rolpermisousuarios",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/rolpermisousuarios",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/producto",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/producto",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/producto/{id_producto}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/producto/{id_producto}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Categoria",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/categoria",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Categoria/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/categoria/{id}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/almacen",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/almacen",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/venta",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/venta",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/venta/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/venta/{id}",
+      "UpstreamHttpMethod": [ "Delete", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/detalleventa",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/detalleventa",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/detalleventa/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/detalleventa/{id}",
+      "UpstreamHttpMethod": [ "Delete", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/productoalmacen",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/productoalmacen",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/productoalmacen/{productoId}/{almacenId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/productoalmacen/{productoId}/{almacenId}",
+      "UpstreamHttpMethod": [ "Delete", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/cliente",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/cliente",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/cliente/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/cliente/{id}",
+      "UpstreamHttpMethod": [ "Delete", "PUT", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/articulo",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/articulo",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/articulo/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/articulo/{id}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/almacen",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/inventario/almacen",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/almacen/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/inventario/almacen/{id}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/ingreso",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ingreso",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/ingreso/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ingreso/{id}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/egreso",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/egreso",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/egreso/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/egreso/{id}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/traspaso",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/traspaso",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/traspaso/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/traspaso/{id}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/DetalleIngreso",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/DetalleIngreso",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/DetalleIngreso/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/DetalleIngreso/{id}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/DetalleIngreso/ingreso/{ingresoId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/DetalleIngreso/ingreso/{ingresoId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/ArticuloAlmacen",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ArticuloAlmacen",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/ArticuloAlmacen/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ArticuloAlmacen/{id}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/DetalleEgreso",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/DetalleEgreso",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/DetalleEgreso/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/DetalleEgreso/{id}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/DetalleEgreso/egreso/{egresoId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/DetalleEgreso/egreso/{egresoId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/DetalleTraspaso",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/DetalleTraspaso",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/DetalleTraspaso/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/DetalleTraspaso/{id}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/DetalleTraspaso/traspaso/{traspasoId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/DetalleTraspaso/traspaso/{traspasoId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Articulo/upload/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Articulo/upload/{id}",
+      "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000"
+    
+  }
+}

@@ -1,0 +1,94 @@
+<div class="p-6 mt-10 bg-gradient-to-br from-gray-900 via-black to-blue-900 text-white rounded-2xl shadow-2xl border border-blue-500/30 max-w-2xl mx-auto">
+
+  <div class="flex items-center gap-4 mb-8">
+    <button (click)="volver()"
+      class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition">
+      ← Volver
+    </button>
+    <h2 class="text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
+      Gestionando: <span class="text-white">{{ usuario?.username }}</span>
+    </h2>
+  </div>
+
+  <div class="flex gap-4 mb-6 border-b border-gray-700">
+    <button (click)="tabActiva = 'rol'"
+      [ngClass]="tabActiva === 'rol' ? 'border-b-2 border-blue-500 text-blue-400' : 'text-gray-400'"
+      class="pb-2 font-semibold transition">
+      👤 Asignar Rol
+    </button>
+    <button (click)="tabActiva = 'datos'"
+      [ngClass]="tabActiva === 'datos' ? 'border-b-2 border-blue-500 text-blue-400' : 'text-gray-400'"
+      class="pb-2 font-semibold transition">
+      ✏️ Editar Datos
+    </button>
+  </div>
+
+  <div *ngIf="tabActiva === 'rol'">
+    <div class="mb-4">
+      <p class="text-gray-400 text-sm mb-2">Rol actual:</p>
+      <div class="flex flex-wrap gap-2 mb-4">
+        <ng-container *ngIf="usuario?.roles && usuario.roles.length > 0; else sinRol">
+          <span *ngFor="let rol of usuario.roles"
+            class="px-3 py-1 bg-blue-600/30 text-blue-300 rounded-lg text-sm">
+            {{ rol.nombre_Rol }}
+          </span>
+        </ng-container>
+        <ng-template #sinRol>
+          <span class="text-gray-400 text-sm">Sin rol asignado</span>
+        </ng-template>
+      </div>
+
+      <label class="text-sm text-gray-400 mb-1 block">Seleccionar nuevo rol</label>
+      <select [(ngModel)]="rolSeleccionado"
+        class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 mb-4">
+        <option [ngValue]="null">-- Selecciona un rol --</option>
+        <option *ngFor="let rol of roles" [ngValue]="rol.iD_Rol">
+          {{ rol.nombre_Rol }}
+        </option>
+      </select>
+
+      <button (click)="asignarRol()" [disabled]="!rolSeleccionado"
+        class="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow-md transition disabled:opacity-50">
+        Asignar Rol
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="tabActiva === 'datos'">
+    <form [formGroup]="editForm" (ngSubmit)="guardarDatos()" class="grid grid-cols-2 gap-4">
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm text-gray-400">Nombre completo *</label>
+        <input formControlName="fullname" type="text"
+          class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm text-gray-400">Username *</label>
+        <input formControlName="username" type="text"
+          class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm text-gray-400">Correo</label>
+        <input formControlName="correo" type="email"
+          class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm text-gray-400">Teléfono</label>
+        <input formControlName="telefono" type="text"
+          class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+      </div>
+
+      <div class="col-span-2 flex justify-center mt-4">
+        <button type="submit" [disabled]="editForm.invalid"
+          class="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow-md transition disabled:opacity-50">
+          Guardar Cambios
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

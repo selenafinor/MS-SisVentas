@@ -1,0 +1,103 @@
+<div class="p-6 mt-10 bg-gradient-to-br from-gray-900 via-black to-blue-900 text-white rounded-2xl shadow-2xl border border-blue-500/30">
+  <h2 class="text-4xl font-extrabold mb-8 text-center bg-gradient-to-r from-blue-400 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
+    Lista de Almacenes
+  </h2>
+
+  <div class="flex justify-end mb-4">
+    <button (click)="crearAlmacen()"
+      class="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow-md transition-transform transform hover:scale-105">
+      ➕ Crear Almacén
+    </button>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full table-auto text-sm text-center bg-gray-900/80 rounded-xl shadow-xl border border-gray-700">
+      <thead>
+        <tr class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
+          <th class="px-5 py-2 text-left">Nombre</th>
+          <th class="px-5 py-2 text-left">Dirección</th>
+          <th class="px-5 py-2 text-left">Cap. Máx</th>
+          <th class="px-5 py-2 text-left">Estado</th>
+          <th class="px-5 py-2 text-left">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let almacen of almacenes">
+          <tr class="hover:bg-gray-800 transition-colors border-b border-gray-700">
+            <td class="px-6 py-4 font-semibold text-blue-400">{{ almacen.nombre }}</td>
+            <td class="px-6 py-4">{{ almacen.direccion }}</td>
+            <td class="px-6 py-4">
+              <div class="flex flex-col gap-1">
+                <span class="text-xs">
+                  {{ getStockTotal(almacen.id!) }} / {{ almacen.cantidadMax }}
+                  <span [ngClass]="getPorcentaje(almacen.id!, almacen.cantidadMax!) >= 100 ? 'text-red-400' : 'text-green-400'">
+                    {{ getPorcentaje(almacen.id!, almacen.cantidadMax!) }}%
+                  </span>
+                </span>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div class="h-2 rounded-full transition-all"
+                    [ngClass]="getPorcentaje(almacen.id!, almacen.cantidadMax!) >= 100 ? 'bg-red-500' : 'bg-green-500'"
+                    [style.width.%]="getPorcentaje(almacen.id!, almacen.cantidadMax!)">
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <span [ngClass]="almacen.estado === 'activo' ? 'text-green-400' : 'text-red-400'">
+                {{ almacen.estado }}
+              </span>
+            </td>
+            <td class="px-6 py-4 flex gap-2">
+              <button (click)="editarAlmacen(almacen.id!)"
+                class="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1 rounded-md transition duration-300">
+                Editar
+              </button>
+              <button (click)="toggleStock(almacen.id!)"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition duration-300">
+                {{ almacenExpandido === almacen.id ? 'Ocultar' : 'Ver stock' }}
+              </button>
+            </td>
+          </tr>
+
+          <!-- Panel de stock expandible -->
+          <tr *ngIf="almacenExpandido === almacen.id">
+            <td colspan="5" class="px-6 py-4 bg-gray-800/60">
+              <div class="mb-2 text-cyan-400 font-bold text-left">
+                📦 Stock — {{ almacen.nombre }}
+              </div>
+              <div class="text-left text-xs text-gray-400 mb-2">
+                Capacidad ocupada:
+                <span class="font-semibold text-white">
+                  {{ getStockTotal(almacen.id!) }} / {{ almacen.cantidadMax }} uds
+                  ({{ getPorcentaje(almacen.id!, almacen.cantidadMax!) }}%)
+                </span>
+              </div>
+              <table class="w-full text-sm text-center border border-gray-700 rounded-lg">
+                <thead>
+                  <tr class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
+                    <th class="px-4 py-2 text-left">Artículo</th>
+                    <th class="px-4 py-2 text-left">Stock</th>
+                    <th class="px-4 py-2 text-left">Stock Mín</th>
+                    <th class="px-4 py-2 text-left">Stock Máx</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let aa of getArticulosPorAlmacen(almacen.id!)"
+                    class="border-b border-gray-700 hover:bg-gray-700">
+                    <td class="px-4 py-2 text-left">{{ aa.articulo?.nombre || '-' }}</td>
+                    <td class="px-4 py-2 text-left"
+                      [ngClass]="aa.stock <= aa.stockMin ? 'text-red-400 font-bold' : 'text-green-400 font-bold'">
+                      {{ aa.stock }}
+                    </td>
+                    <td class="px-4 py-2 text-left">{{ aa.stockMin }}</td>
+                    <td class="px-4 py-2 text-left">{{ aa.stockMax }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

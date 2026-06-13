@@ -1,0 +1,107 @@
+<div class="p-6 mt-10 bg-gradient-to-br from-gray-900 via-black to-blue-900 text-white rounded-2xl shadow-2xl border border-blue-500/30 max-w-4xl mx-auto">
+
+  <h2 class="text-3xl font-extrabold mb-8 text-center bg-gradient-to-r from-blue-400 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
+    Nuevo Ingreso
+  </h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <div>
+        <label class="block text-sm text-gray-400 mb-1">Fecha</label>
+        <input type="date" formControlName="fecha"
+          class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 transition"
+          [ngClass]="{'border-red-500': isInvalid('fecha')}" />
+        <p *ngIf="isInvalid('fecha')" class="text-red-400 text-xs mt-1">La fecha es requerida.</p>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-400 mb-1">Estado</label>
+        <select formControlName="estado"
+          class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 transition">
+          <option value="activo">Activo</option>
+          <option value="inactivo">Inactivo</option>
+        </select>
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-sm text-gray-400 mb-1">Glosa</label>
+        <input type="text" formControlName="glosa" placeholder="Descripción del ingreso"
+          class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 transition"
+          [ngClass]="{'border-red-500': isInvalid('glosa')}" />
+        <p *ngIf="isInvalid('glosa')" class="text-red-400 text-xs mt-1">La glosa es requerida.</p>
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-sm text-gray-400 mb-1">Motivo</label>
+        <input type="text" formControlName="motivo" placeholder="Motivo del ingreso"
+          class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 transition"
+          [ngClass]="{'border-red-500': isInvalid('motivo')}" />
+        <p *ngIf="isInvalid('motivo')" class="text-red-400 text-xs mt-1">El motivo es requerido.</p>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-lg font-semibold text-blue-400">Detalle de Artículos</h3>
+        <button type="button" (click)="agregarDetalle()"
+          class="px-4 py-1.5 bg-blue-700 hover:bg-blue-600 text-white text-sm rounded-lg transition">
+          ➕ Agregar Artículo
+        </button>
+      </div>
+
+      <div formArrayName="detalles">
+        <div *ngFor="let detalle of detalles.controls; let i = index" [formGroupName]="i"
+          class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3 p-3 bg-gray-800/60 rounded-xl border border-gray-700">
+          <div class="md:col-span-2">
+            <label class="block text-xs text-gray-400 mb-1">Artículo / Almacén</label>
+            <select formControlName="id_ArticuloAlmacen"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 transition"
+              [ngClass]="{'border-red-500': isDetalleInvalid(i, 'id_ArticuloAlmacen')}">
+              <option [ngValue]="null" disabled>Selecciona artículo</option>
+              <option *ngFor="let art of articulosAlmacen" [value]="art.id">
+                {{ art.articulo?.nombre || 'Artículo #' + art.id_Articulo }} — {{ art.almacen?.nombre || 'Almacén #' + art.id_Almacen }}
+              </option>
+            </select>
+            <p *ngIf="isDetalleInvalid(i, 'id_ArticuloAlmacen')" class="text-red-400 text-xs mt-1">Requerido.</p>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Cantidad</label>
+            <input type="number" formControlName="cantidad" min="1"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 transition"
+              [ngClass]="{'border-red-500': isDetalleInvalid(i, 'cantidad')}" />
+            <p *ngIf="isDetalleInvalid(i, 'cantidad')" class="text-red-400 text-xs mt-1">Mínimo 1.</p>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Precio Compra</label>
+            <input type="number" formControlName="precioCompra" min="0" step="0.01"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 transition" />
+          </div>
+          <div class="md:col-span-3">
+            <label class="block text-xs text-gray-400 mb-1">Observación</label>
+            <input type="text" formControlName="observacion" placeholder="Opcional"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 transition" />
+          </div>
+          <div class="flex items-end">
+            <button type="button" (click)="quitarDetalle(i)"
+              class="w-full bg-red-600 hover:bg-red-500 text-white text-sm px-3 py-2 rounded-lg transition">
+              🗑️ Quitar
+            </button>
+          </div>
+        </div>
+        <p *ngIf="detalles.length === 0" class="text-gray-500 text-sm text-center py-4">
+          No hay artículos agregados. Haz clic en "Agregar Artículo".
+        </p>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-3 mt-6 pb-4">
+      <button type="button" (click)="cancelar()"
+        class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition">
+        Cancelar
+      </button>
+      <button type="submit" [disabled]="isSubmitting"
+        class="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed">
+        {{ isSubmitting ? 'Guardando...' : '💾 Guardar Ingreso' }}
+      </button>
+    </div>
+
+  </form>
+</div>

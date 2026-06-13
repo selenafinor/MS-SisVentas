@@ -1,0 +1,116 @@
+import { CommonModule, DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UsuarioService } from '../usuario.service';
+import { RolService } from '../../rol/rol.service';
+import { Rol } from '../../../interfaces/rol.interface';
+import Swal from 'sweetalert2';
+
+@Component({
+  selector: 'app-usuario-gestionar',
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  templateUrl: './usuario-gestionar.component.html',
+  styleUrl: './usuario-gestionar.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class UsuarioGestionarComponent implements OnInit {
+  usuario: any = null;
+  roles: Rol[] = [];
+  rolSeleccionado: number | null = null;
+  tabActiva: string = 'rol';
+  editForm!: FormGroup;
+  userId!: number;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private usuarioService: UsuarioService,
+    private rolService: RolService,
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.userId = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.editForm = this.fb.group({
+      fullname: ['', Validators.required],
+      username: ['', Validators.required],
+      correo: ['', Validators.email],
+      telefono: [''],
+      estado: ['activo'],
+    });
+
+    this.usuarioService.getUsuarioById(this.userId).subscribe({
+      next: (data) => {
+        this.usuario = data;
+        this.editForm.patchValue({
+          fullname: data.fullname,
+          username: data.username,
+          correo: data.correo,
+          telefono: data.telefono,
+          estado: data.estado || 'activo',
+        });
+        this.cdr.markForCheck();
+      },
+      error: (err) => console.error(err),
+    });
+
+    this.rolService.getRoles().subscribe({
+      next: (roles) => {
+        this.roles = roles;
+        this.cdr.markForCheck();
+      },
+      error: (err) => console.error(err),
+    });
+  }
+
+  asignarRol(): void {
+    if (!this.rolSeleccionado) return;
+
+    const rolPermisos = this.roles.find(r => r.iD_Rol === Number(this.rolSeleccionado))?.rolPermisos;
+
+    if (!rolPermisos || rolPermisos.length === 0) {
+      Swal.fire('Error', 'El rol no tiene permisos asignados.', 'warning');
+      return;
+    }
+
+   const asignaciones = rolPermisos.map(rp =>
+  this.rolService.createRolUsuario({
+    userId: this.userId,
+    iD_Rol_Permiso: rp.iD_Rol_Permiso!
+  }).toPromise()
+);
+
+
+    Promise.all(asignaciones).then(() => {
+      Swal.fire('¡Asignado!', 'Rol asignado correctamente.', 'success');
+      this.cdr.markForCheck();
+    }).catch(err => console.error(err));
+  }
+
+ guardarDatos(): void {
+  if (this.editForm.valid) {
+    const datos = {
+      userId: this.userId,
+      fullname: this.editForm.value.fullname,
+      username: this.editForm.value.username,
+      correo: this.editForm.value.correo,
+      telefono: this.editForm.value.telefono,
+      estado: this.usuario?.estado || 'activo',
+      password: this.usuario?.password || ''
+    };
+    this.usuarioService.updateUsuario(this.userId, datos).subscribe({
+      next: () => {
+        Swal.fire('¡Actualizado!', 'Datos actualizados correctamente.', 'success');
+      },
+      error: (err) => console.error(err),
+    });
+  }
+}
+
+  volver(): void {
+    this.router.navigate(['/dashboard/user']);
+  }
+}

@@ -1,0 +1,115 @@
+<main class="flex flex-col sm:flex-row text-white bg-gray-900 min-h-screen">
+  <!-- Sidebar -->
+  <nav class="hidden sm:flex flex-col w-72 min-h-screen bg-gray-800 bg-opacity-50 p-5 rounded-3xl overflow-y-auto max-h-screen">
+    <h1 class="font-bold text-lg lg:text-3xl bg-gradient-to-br from-white via-white/50 bg-clip-text text-transparent text-center">
+      AppVenta<span class="text-indigo-500">.</span>
+    </h1>
+    <div class="border-gray-700 border my-5"></div>
+
+    <!-- GENERAL -->
+    <p class="text-xs text-gray-400 uppercase mb-2 px-2">General</p>
+    <div class="flex flex-col space-y-1 mb-4">
+      @for (route of generalRoutes; track $index) {
+        @if (hasPermission(route.permission)) {
+          <a [routerLink]="route.path" routerLinkActive="bg-gray-600"
+            class="flex items-center hover:bg-gray-600 rounded-md p-2 transition-colors">
+            <i class="{{ route.icon }} text-lg mr-3 text-indigo-400"></i>
+            <span class="text-white font-semibold">{{ route.title }}</span>
+          </a>
+        }
+      }
+    </div>
+
+    <!-- MÓDULOS -->
+    <p class="text-xs text-gray-400 uppercase mb-2 px-2">Módulos</p>
+    <div class="flex flex-col space-y-1">
+
+      <!-- Inventario -->
+      @if (hasAnyPermission(inventarioRoutes)) {
+        <div>
+          <button (click)="inventarioOpen = !inventarioOpen"
+            class="flex items-center justify-between w-full hover:bg-gray-600 rounded-md p-2 transition-colors">
+            <div class="flex items-center">
+              <i class="pi pi-box text-lg mr-3 text-indigo-400"></i>
+              <span class="text-white font-semibold">Inventario</span>
+            </div>
+            <i class="pi {{ inventarioOpen ? 'pi-chevron-down' : 'pi-chevron-right' }} text-gray-400 text-sm"></i>
+          </button>
+          @if (inventarioOpen) {
+            <div class="ml-6 flex flex-col space-y-1 mt-1">
+              @for (route of inventarioRoutes; track $index) {
+                @if (hasPermission(route.permission)) {
+                  <a [routerLink]="route.path" routerLinkActive="bg-gray-600"
+                    class="flex items-center hover:bg-gray-600 rounded-md p-2 transition-colors">
+                    <span class="text-gray-300 text-sm">• {{ route.title }}</span>
+                  </a>
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Ventas -->
+      @if (hasAnyPermission(ventasRoutes)) {
+        <div>
+          <button (click)="ventasOpen = !ventasOpen"
+            class="flex items-center justify-between w-full hover:bg-gray-600 rounded-md p-2 transition-colors">
+            <div class="flex items-center">
+              <i class="pi pi-shopping-cart text-lg mr-3 text-indigo-400"></i>
+              <span class="text-white font-semibold">Ventas</span>
+            </div>
+            <i class="pi {{ ventasOpen ? 'pi-chevron-down' : 'pi-chevron-right' }} text-gray-400 text-sm"></i>
+          </button>
+          @if (ventasOpen) {
+            <div class="ml-6 flex flex-col space-y-1 mt-1">
+              @for (route of ventasRoutes; track $index) {
+                @if (hasPermission(route.permission)) {
+                  <a [routerLink]="route.path" routerLinkActive="bg-gray-600"
+                    class="flex items-center hover:bg-gray-600 rounded-md p-2 transition-colors">
+                    <span class="text-gray-300 text-sm">• {{ route.title }}</span>
+                  </a>
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Compras (futuro) -->
+      <div>
+        <button class="flex items-center justify-between w-full hover:bg-gray-600 rounded-md p-2 transition-colors opacity-50 cursor-not-allowed">
+          <div class="flex items-center">
+            <i class="pi pi-truck text-lg mr-3 text-indigo-400"></i>
+            <span class="text-white font-semibold">Compras</span>
+          </div>
+          <span class="text-xs text-gray-500">Próximamente</span>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Content Section -->
+  <section class="flex flex-col w-full max-h-screen bg-gray-800 bg-opacity-40 p-4 sm:mx-5 rounded-3xl">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-700 p-4 rounded-3xl mb-4 shadow-lg">
+      <div class="flex items-center space-x-3">
+        <span class="font-semibold text-lg">Bienvenido, {{ user?.username }}</span>
+        <span class="text-sm text-gray-400">Rol:
+          @for (item of user?.roles; track $index) {
+            {{ item.nombre_Rol }}
+          }
+        </span>
+      </div>
+      <button (click)="logout()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm shadow-md">
+        Cerrar sesión
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex flex-auto flex-col overflow-y-auto">
+      <router-outlet />
+    </div>
+  </section>
+</main>

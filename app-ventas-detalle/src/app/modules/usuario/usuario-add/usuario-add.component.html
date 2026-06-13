@@ -1,0 +1,93 @@
+<div class="p-6 mt-10 bg-gradient-to-br from-gray-900 via-black to-blue-900 text-white rounded-2xl shadow-2xl border border-blue-500/30 max-w-2xl mx-auto">
+  <h2 class="text-3xl font-extrabold mb-8 text-center bg-gradient-to-r from-blue-400 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
+    ➕ Crear Usuario
+  </h2>
+
+  <form [formGroup]="userForm" (ngSubmit)="createUser()" class="grid grid-cols-2 gap-6">
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm text-gray-400">Nombre completo *</label>
+      <input formControlName="fullname" type="text" placeholder="Ej: Edwin Calle"
+        class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+      <span *ngIf="userForm.get('fullname')?.invalid && userForm.get('fullname')?.touched"
+        class="text-red-400 text-xs">⚠️ El nombre es requerido.</span>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm text-gray-400">Username *</label>
+      <input formControlName="username" type="text" placeholder="Ej: edwincalle"
+        class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+      <span *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched"
+        class="text-red-400 text-xs">⚠️ El username es requerido.</span>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm text-gray-400">Correo *</label>
+      <input formControlName="correo" type="email" placeholder="Ej: usuario@correo.com"
+        class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+      <span *ngIf="userForm.get('correo')?.invalid && userForm.get('correo')?.touched"
+        class="text-red-400 text-xs">⚠️ Correo inválido.</span>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm text-gray-400">Teléfono</label>
+      <input formControlName="telefono" type="text" placeholder="Ej: 70012345"
+        class="bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+    </div>
+
+    
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm text-gray-400">Contraseña *</label>
+      <div class="relative">
+        <input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña"
+          class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"/>
+        <button type="button" (click)="showPassword = !showPassword"
+          class="absolute right-3 top-2 text-gray-400 hover:text-white text-xs">
+          {{ showPassword ? '🙈' : '👁️' }}
+        </button>
+      </div>
+      <div class="mt-1">
+        <div class="flex gap-1 mb-1">
+          <div *ngFor="let i of [1,2,3,4,5]"
+            class="h-1 flex-1 rounded-full transition-all"
+            [ngClass]="i <= passwordStrength ? strengthColor : 'bg-gray-700'">
+          </div>
+        </div>
+        <span class="text-xs" [ngClass]="{
+          'text-red-400': passwordStrength <= 1,
+          'text-orange-400': passwordStrength === 2,
+          'text-yellow-400': passwordStrength === 3,
+          'text-blue-400': passwordStrength === 4,
+          'text-green-400': passwordStrength === 5
+        }">{{ strengthLabel }}</span>
+      </div>
+      <div class="text-xs mt-1 space-y-1">
+        <div [ngClass]="hasMinLength() ? 'text-green-400' : 'text-gray-500'">
+          ✓ Mínimo 8 caracteres
+        </div>
+        <div [ngClass]="hasUpperCase() ? 'text-green-400' : 'text-gray-500'">
+          ✓ Al menos una mayúscula
+        </div>
+        <div [ngClass]="hasNumber() ? 'text-green-400' : 'text-gray-500'">
+          ✓ Al menos un número
+        </div>
+        <div [ngClass]="hasSymbol() ? 'text-green-400' : 'text-gray-500'">
+          ✓ Al menos un símbolo (!&#64;#$%^&*)
+        </div>
+      </div>
+    </div>
+
+    <div class="col-span-2 flex justify-center gap-4 mt-4">
+      <button type="submit" [disabled]="userForm.invalid"
+        class="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow-md transition disabled:opacity-50">
+        Agregar Usuario
+      </button>
+      <button type="button" (click)="goBack()"
+        class="px-6 py-2 bg-gray-600 hover:bg-gray-500 text-white font-semibold rounded-lg shadow-md transition">
+        ⬅ Volver
+      </button>
+    </div>
+
+  </form>
+</div>

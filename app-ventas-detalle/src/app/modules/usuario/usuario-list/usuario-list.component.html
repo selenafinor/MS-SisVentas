@@ -1,0 +1,64 @@
+<div class="p-4 mt-6 bg-gradient-to-br from-gray-900 via-black to-blue-900 text-white rounded-2xl shadow-2xl border border-blue-500/30">
+  <h2 class="text-3xl font-extrabold mb-6 text-center bg-gradient-to-r from-blue-400 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
+    Lista de Usuarios
+  </h2>
+
+  <div class="flex justify-end mb-3">
+    <button (click)="createUser()"
+      class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow-md transition-transform transform hover:scale-105 text-sm">
+      ➕ Nuevo Usuario
+    </button>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full table-auto text-xs text-center bg-gray-900/80 rounded-xl shadow-xl border border-gray-700">
+      <thead>
+        <tr class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
+          <th class="px-3 py-2 text-left">Nombre</th>
+          <th class="px-3 py-2 text-left">Username</th>
+          <th class="px-3 py-2 text-left">Correo</th>
+          <th class="px-3 py-2 text-left">Rol</th>
+          <th class="px-3 py-2 text-left">Estado</th>
+          <th class="px-3 py-2 text-left">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users"
+          class="hover:bg-gray-800 transition-colors border-b border-gray-700">
+          <td class="px-3 py-2 font-semibold">{{ user.fullname }}</td>
+          <td class="px-3 py-2 text-blue-400">{{ user.username }}</td>
+          <td class="px-3 py-2">{{ user.correo || '-' }}</td>
+          <td class="px-3 py-2">
+            <ng-container *ngIf="user.roles && user.roles.length > 0; else noRol">
+              <span *ngFor="let rol of user.roles"
+                class="px-2 py-0.5 bg-blue-600/30 text-blue-300 rounded text-xs mr-1">
+                {{ rol.nombre_Rol }}
+              </span>
+            </ng-container>
+            <ng-template #noRol>
+              <span class="text-gray-400 text-xs">Sin rol</span>
+            </ng-template>
+          </td>
+          <td class="px-3 py-2">
+            <span [ngClass]="user.estado === 'activo' ? 'text-green-400' : 'text-red-400'">
+              {{ user.estado || 'activo' }}
+            </span>
+          </td>
+          <td class="px-3 py-2">
+            <div class="flex gap-1">
+              <button (click)="gestionarUsuario(user.userId!)"
+                class="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1 rounded transition text-xs">
+                Gestionar
+              </button>
+              <button (click)="cambiarEstado(user)"
+                [ngClass]="user.estado === 'activo' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-green-500 hover:bg-green-600'"
+                class="text-white px-2 py-1 rounded transition text-xs">
+                {{ user.estado === 'activo' ? 'Deshabilitar' : 'Habilitar' }}
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
