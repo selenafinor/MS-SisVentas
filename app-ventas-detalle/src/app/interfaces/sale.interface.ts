@@ -1,18 +1,18 @@
 import { Customer } from "./customer.interface";
 import { SaleDetail } from "./sale-detail.inteface";
-import { User } from "./user.interface";
 
 export interface Sale {
-  saleId?: number;
-  CustomerName?:string;
-  saleDate: string;
-  totalAmount: number;
-  customerId: number;
-  usuario?:User;
-  saleDetails: SaleDetail[];
-  id: number;
-  fecha: string;
-  clienteId: number;
-  cliente: Customer;
-  usuarioId: number;
+  id?: number;
+  fecha?: string;
+  hora?: string;
+  montoTotal?: number;
+  glosa?: string;
+  estado?: string;
+  tipoPago?: string;
+  pagoConfirmado?: boolean;
+  idTransaccionQr?: string;
+  clienteId?: number;
+  cliente?: Customer;
+  usuarioId?: number;
+  detalles?: SaleDetail[];
 }

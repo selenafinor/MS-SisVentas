@@ -16,7 +16,7 @@ const httpOptions = (token: string) => ({
 })
 export class ProductoAlmacenService {
 
-  apiUrl:string = `${environment.URL_SERVICIOS}/productoalmacen`
+      apiUrl: string = `${environment.URL_SERVICIOS}/ArticuloAlmacen`
 
     constructor(private http: HttpClient) { }
 

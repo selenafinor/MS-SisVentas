@@ -77,7 +77,14 @@ export const routes: Routes = [
           import('./modules/sale/sale.route').then(m => m.sale_routes),
         data: { icon: 'pi pi-cart-plus', title: 'Venta', description: 'Gestion de Ventas', permission: 'Venta' }
       },
-      {
+      { 
+        
+        path: 'compra',
+        loadChildren: () =>
+          import('./modules/compra/compra.route').then(m => m.compra_routes),
+        data: { icon: 'pi pi-truck', title: 'Compras', description: 'Gestion de Compras', permission: 'Compra' }
+      },
+      { 
         path: 'ingreso',
         loadChildren: () =>
           import('./modules/inventario/ingreso/ingreso.route').then(m => m.ingreso_routes),

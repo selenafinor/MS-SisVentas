@@ -1,16 +1,11 @@
 export interface Customer {
-  customerId?: number;
-  firstName?: string;
-  pSurname?: string;
-  mSurname?: string;
-  email?: string;
-  company?: string;
-  phone?: string;
-  address?: string;
-  type?: string;
-  id?: number;//si
-  nombre?: string;//si
-  apellidos?: string;//si
-  celular?: number;//si
-
+  id?: number;
+  nombre?: string;
+  paterno?: string;
+  materno?: string;
+  telefono?: string;
+  correo?: string;
+  nit?: string;
+  direccion?: string;
+  estado?: string;
 }

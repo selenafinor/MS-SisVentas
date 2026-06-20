@@ -10,7 +10,7 @@ import { User } from '../../../interfaces/user.interface';
   imports: [CommonModule, RouterModule],
   templateUrl: './dashboardLayout.component.html',
   styleUrl: './dashboardLayout.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+changeDetection: ChangeDetectionStrategy.Default,
 })
 export class DashboardLayoutComponent implements OnInit {
   public userPermissions: Permiso[] = [];
@@ -35,7 +35,9 @@ export class DashboardLayoutComponent implements OnInit {
     { path: 'sale', title: 'Ventas', permission: 'gestionar_ventas' },
   ];
 
-  comprasRoutes: any[] = [];
+  comprasRoutes = [
+  { path: 'compra/proveedor/list', title: 'Proveedores', permission: 'gestionar_compras' },
+];
 
   inventarioOpen = false;
   ventasOpen = false;

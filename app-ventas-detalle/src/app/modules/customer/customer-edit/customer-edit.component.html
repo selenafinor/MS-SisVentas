@@ -1,110 +1,77 @@
-<div class="customer-edit-container p-6 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-3xl shadow-xl max-w-4xl mx-auto mt-10">
-  <h2 class="text-3xl font-semibold mb-6 text-center text-gray-200">Editar Cliente</h2>
-  <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-      <!-- ID del Cliente -->
-      <div class="form-group">
-        <label for="customerId" class="block text-gray-400 font-semibold">ID del Cliente</label>
-        <input
-          id="customerId"
-          formControlName="customerId"
-          type="number"
-          class="w-full p-3 mt-1 rounded-md bg-gray-700 border-2 border-gray-600 focus:border-blue-500 focus:outline-none shadow-md hover:shadow-lg transition-shadow duration-300"
-        />
-      </div>
-      <!-- Nombre -->
-      <div class="form-group">
-        <label for="firstName" class="block text-gray-400 font-semibold">Nombre</label>
-        <input
-          id="firstName"
-          formControlName="firstName"
-          type="text"
-          class="w-full p-3 mt-1 rounded-md bg-gray-700 border-2 border-gray-600 focus:border-blue-500 focus:outline-none shadow-md hover:shadow-lg transition-shadow duration-300"
-        />
-      </div>
-    </div>
+<div class="p-6">
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-      <!-- Apellido Paterno -->
-      <div class="form-group">
-        <label for="pSurname" class="block text-gray-400 font-semibold">Apellido Paterno</label>
-        <input
-          id="pSurname"
-          formControlName="pSurname"
-          type="text"
-          class="w-full p-3 mt-1 rounded-md bg-gray-700 border-2 border-gray-600 focus:border-blue-500 focus:outline-none shadow-md hover:shadow-lg transition-shadow duration-300"
-        />
-      </div>
-      <!-- Apellido Materno -->
-      <div class="form-group">
-        <label for="mSurname" class="block text-gray-400 font-semibold">Apellido Materno</label>
-        <input
-          id="mSurname"
-          formControlName="mSurname"
-          type="text"
-          class="w-full p-3 mt-1 rounded-md bg-gray-700 border-2 border-gray-600 focus:border-blue-500 focus:outline-none shadow-md hover:shadow-lg transition-shadow duration-300"
-        />
-      </div>
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-200">Gestión de Clientes</h2>
+      <p class="text-gray-400 text-sm">Administrá los clientes del sistema</p>
     </div>
+    <a routerLink="/dashboard/customer/list"
+       class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition">
+      ← Ver lista
+    </a>
+  </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-      <!-- Correo Electrónico -->
-      <div class="form-group">
-        <label for="email" class="block text-gray-400 font-semibold">Correo Electrónico</label>
-        <input
-          id="email"
-          formControlName="email"
-          type="email"
-          class="w-full p-3 mt-1 rounded-md bg-gray-700 border-2 border-gray-600 focus:border-blue-500 focus:outline-none shadow-md hover:shadow-lg transition-shadow duration-300"
-        />
-      </div>
-      <!-- Teléfono -->
-      <div class="form-group">
-        <label for="phone" class="block text-gray-400 font-semibold">Teléfono</label>
-        <input
-          id="phone"
-          formControlName="phone"
-          type="text"
-          class="w-full p-3 mt-1 rounded-md bg-gray-700 border-2 border-gray-600 focus:border-blue-500 focus:outline-none shadow-md hover:shadow-lg transition-shadow duration-300"
-        />
-      </div>
-    </div>
+  <div class="bg-gray-800 rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+    <h3 class="text-xl font-bold text-center text-gray-200 mb-6">
+      Editando: <span class="text-red-400">{{ nombre }} {{ paterno }}</span>
+    </h3>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-      <!-- Dirección -->
-      <div class="form-group">
-        <label for="address" class="block text-gray-400 font-semibold">Dirección</label>
-        <input
-          id="address"
-          formControlName="address"
-          type="text"
-          class="w-full p-3 mt-1 rounded-md bg-gray-700 border-2 border-gray-600 focus:border-blue-500 focus:outline-none shadow-md hover:shadow-lg transition-shadow duration-300"
-        />
+    <form #f="ngForm">
+      <div class="mb-4">
+        <label class="block text-gray-400 font-semibold mb-1">Nombre *</label>
+        <input [(ngModel)]="nombre" name="nombre" type="text"
+               class="w-full p-3 rounded-md bg-gray-700 border-2 border-gray-600 text-gray-200 focus:border-blue-500 focus:outline-none" />
       </div>
-      <!-- Tipo -->
-      <div class="form-group">
-        <label for="type" class="block text-gray-400 font-semibold">Tipo</label>
-        <select
-          id="type"
-          formControlName="type"
-          class="w-full p-3 mt-1 rounded-md bg-gray-700 border-2 border-gray-600 focus:border-blue-500 focus:outline-none shadow-md hover:shadow-lg transition-shadow duration-300"
-        >
-          <option value="" disabled selected>Selecciona el tipo</option>
-          <option value="natural">Natural</option>
-          <option value="juridico">Jurídico</option>
-        </select>
-      </div>
-    </div>
 
-    <!-- Botón de Enviar -->
-    <div class="text-center">
-      <button
-        type="submit"
-        [disabled]="customerForm.invalid"
-        class="px-6 py-3 bg-gradient-to-r from-gray-700 to-gray-800 rounded-md text-white hover:bg-gradient-to-l hover:from-gray-800 hover:to-gray-700 transition-all duration-300 shadow-lg hover:shadow-2xl"
-      >
-        Guardar Cambios
-      </button>
-    </div>
-  </form>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-gray-400 font-semibold mb-1">Paterno</label>
+          <input [(ngModel)]="paterno" name="paterno" type="text"
+                 class="w-full p-3 rounded-md bg-gray-700 border-2 border-gray-600 text-gray-200 focus:border-blue-500 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-gray-400 font-semibold mb-1">Materno</label>
+          <input [(ngModel)]="materno" name="materno" type="text"
+                 class="w-full p-3 rounded-md bg-gray-700 border-2 border-gray-600 text-gray-200 focus:border-blue-500 focus:outline-none" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-gray-400 font-semibold mb-1">Teléfono</label>
+          <input [(ngModel)]="telefono" name="telefono" type="text"
+                 class="w-full p-3 rounded-md bg-gray-700 border-2 border-gray-600 text-gray-200 focus:border-blue-500 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-gray-400 font-semibold mb-1">CI / NIT</label>
+          <input [(ngModel)]="nit" name="nit" type="text"
+                 class="w-full p-3 rounded-md bg-gray-700 border-2 border-gray-600 text-gray-200 focus:border-blue-500 focus:outline-none" />
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-400 font-semibold mb-1">Correo</label>
+        <input [(ngModel)]="correo" name="correo" type="email"
+               class="w-full p-3 rounded-md bg-gray-700 border-2 border-gray-600 text-gray-200 focus:border-blue-500 focus:outline-none" />
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-gray-400 font-semibold mb-1">Dirección</label>
+        <input [(ngModel)]="direccion" name="direccion" type="text"
+               class="w-full p-3 rounded-md bg-gray-700 border-2 border-gray-600 text-gray-200 focus:border-blue-500 focus:outline-none" />
+      </div>
+
+      <div class="flex gap-3">
+        <button type="button" (click)="onSubmit()"
+                class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-bold transition">
+          Guardar Cambios
+        </button>
+        <a routerLink="/dashboard/customer/list"
+           class="bg-gray-600 hover:bg-gray-500 text-gray-200 px-6 py-3 rounded-lg font-bold transition">
+          Cancelar
+        </a>
+      </div>
+    </form>
+  </div>
+
 </div>

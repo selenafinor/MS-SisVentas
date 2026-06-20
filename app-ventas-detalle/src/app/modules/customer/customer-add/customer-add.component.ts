@@ -1,63 +1,54 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CustomerService } from '../service/customer.service';
-import { Router } from '@angular/router';
-import { Customer } from '../../../interfaces/customer.interface';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-customer-add',
-  imports: [
-    FormsModule,
-    ReactiveFormsModule, // Asegúrate de incluir esto
-    CommonModule
-  ],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './customer-add.component.html',
   styleUrl: './customer-add.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class CustomerAddComponent implements OnInit{
+export default class CustomerAddComponent {
 
-  customerForm!: FormGroup;  // Inicialización vacía
-  errorMessage: string = ''; // Para manejar los errores
+  nombre: string = '';
+  paterno: string = '';
+  materno: string = '';
+  telefono: string = '';
+  correo: string = '';
+  nit: string = '';
+  direccion: string = '';
+  errorMessage: string = '';
 
   constructor(
-    private fb: FormBuilder, // Inyectar el FormBuilder
-    private customerService: CustomerService, // Inyectar el servicio de cliente
-    private router: Router // Inyectar el router
+    private customerService: CustomerService,
+    private router: Router
   ) {}
 
-  ngOnInit(): void {
-    // Definir el formulario con sus campos y validaciones
-    this.customerForm = this.fb.group({
-      nombre: ['', Validators.required],
-      apellidos: ['', Validators.required],
-      celular: ['', Validators.required],
+  onSubmit(): void {
+    if (!this.nombre) {
+      this.errorMessage = 'El nombre es obligatorio';
+      return;
+    }
+    const customer = {
+      nombre:    this.nombre,
+      paterno:   this.paterno,
+      materno:   this.materno,
+      telefono:  this.telefono,
+      correo:    this.correo,
+      nit:       this.nit,
+      direccion: this.direccion,
+      estado:    'activo'
+    };
+    this.customerService.createCustomer(customer).subscribe({
+      next: () => {
+        alert('Cliente creado exitosamente');
+        this.router.navigate(['/dashboard/customer/list']);
+      },
+      error: () => {
+        this.errorMessage = 'Error al crear el cliente';
+      }
     });
   }
-
-   // Método para crear un cliente
-   onSubmit(): void {
-    if (this.customerForm.valid) {
-      const customer: Customer= this.customerForm.value;
-      this.customerService.createCustomer(customer).subscribe(
-        (response) => {
-          console.log('Cliente creado exitosamente', response);
-          this.router.navigate(['/dashboard/customer/list']); // Redirigir a la lista de clientes
-        },
-        (error) => {
-          this.errorMessage = 'Hubo un error al crear el cliente'; // Mostrar el error
-          console.error(error);
-        }
-      );
-    } else {
-      this.errorMessage = 'Por favor, complete todos los campos correctamente'; // Mostrar mensaje si el formulario no es válido
-    }
-  }
-
-  goBack():void{
-
-    this.router.navigate(['/dashboard/customer/list']);
-  }
-
- }
+}

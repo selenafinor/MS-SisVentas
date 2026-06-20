@@ -44,6 +44,8 @@ namespace MSVenta.Inventario
             services.AddScoped<IEgresoService, EgresoService>();
             services.AddScoped<ITraspasoService, TraspasoService>();
             services.AddScoped<IDetalleIngresoService, DetalleIngresoService>();
+            services.AddHostedService<VentaConsumerService>();
+            services.AddHostedService<CompraConsumerService>();
             services.AddScoped<IArticuloAlmacenService, ArticuloAlmacenService>();
             services.AddScoped<ICategoriaService, CategoriaService>();
             services.AddScoped<IDetalleTraspasoService, DetalleTraspasoService>();

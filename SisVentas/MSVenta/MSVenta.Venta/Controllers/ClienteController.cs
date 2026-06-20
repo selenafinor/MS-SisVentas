@@ -1,101 +1,77 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MSVenta.Venta.Models;
 using MSVenta.Venta.Services;
-using System.Collections.Generic;
-using System;
 using System.Threading.Tasks;
 
 namespace MSVenta.Venta.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class ClienteController : Controller
+    [ApiController]
+    public class ClienteController : ControllerBase
     {
-        private readonly IClienteService _clienteService;
+        private readonly IClienteService _service;
 
-        public ClienteController(IClienteService clienteService)
+        public ClienteController(IClienteService service)
         {
-            _clienteService = clienteService;
+            _service = service;
         }
 
-        // Obtener todos los clientes
+        // GET api/cliente
         [HttpGet]
-        public async Task<IActionResult> GetAllClientes()
+        public async Task<IActionResult> GetAll()
         {
-            var clientes = await _clienteService.GetAllClientes();
+            var clientes = await _service.GetAllClientes();
             return Ok(clientes);
         }
 
-        // Obtener un cliente por ID
+        // GET api/cliente/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCliente(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var cliente = await _clienteService.GetCliente(id);
-            if (cliente == null)
-            {
-                return NotFound(new { message = "Cliente no encontrado." });
-            }
+            var cliente = await _service.GetCliente(id);
+            if (cliente == null) return NotFound();
             return Ok(cliente);
         }
 
-        // Crear un nuevo cliente
+        // GET api/cliente/buscar/carlos
+        [HttpGet("buscar/{termino}")]
+        public async Task<IActionResult> Buscar(string termino)
+        {
+            var clientes = await _service.BuscarClientes(termino);
+            return Ok(clientes);
+        }
+
+        // POST api/cliente
         [HttpPost]
-        public async Task<IActionResult> CreateCliente([FromBody] Cliente cliente)
+        public async Task<IActionResult> Create([FromBody] Cliente cliente)
         {
-            if (cliente == null)
-            {
-                return BadRequest(new { message = "Los datos del cliente son inválidos." });
-            }
-
-            await _clienteService.CreateCliente(cliente);
-            return CreatedAtAction(nameof(GetCliente), new { id = cliente.Id }, cliente);
+            await _service.CreateCliente(cliente);
+            return Ok(cliente);
         }
 
-        // Actualizar un cliente
+        // PUT api/cliente/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCliente(int id, [FromBody] Cliente cliente)
+        public async Task<IActionResult> Update(int id, [FromBody] Cliente cliente)
         {
-            if (cliente == null || id != cliente.Id)
-            {
-                return BadRequest(new { message = "Datos inválidos o IDs no coinciden." });
-            }
-
-            try
-            {
-                await _clienteService.UpdateCliente(cliente);
-                return Ok(new { message = "Cliente actualizado correctamente." });
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = "Cliente no encontrado." });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error interno del servidor.", error = ex.Message });
-            }
+            cliente.Id = id;
+            await _service.UpdateCliente(cliente);
+            return Ok(cliente);
         }
 
-        // Eliminar un cliente
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCliente(int id)
+        // PUT api/cliente/5/toggle
+        [HttpPut("{id}/toggle")]
+        public async Task<IActionResult> Toggle(int id)
         {
-            try
-            {
-                await _clienteService.DeleteCliente(id);
-                return Ok(new { message = "Cliente eliminado correctamente." });
-            }
-            catch (InvalidOperationException)
-            {
-                return BadRequest(new { message = "No se puede eliminar este cliente porque está vinculado a otras transacciones." });
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = "Cliente no encontrado." });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error interno del servidor.", error = ex.Message });
-            }
+            await _service.ToggleEstado(id);
+            return Ok(new { mensaje = "Estado actualizado correctamente" });
+        }
+
+        // DELETE api/cliente/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _service.DeleteCliente(id);
+            return Ok();
         }
     }
 }

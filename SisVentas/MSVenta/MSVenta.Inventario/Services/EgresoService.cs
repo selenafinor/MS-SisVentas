@@ -2,6 +2,7 @@
 using MSVenta.Inventario.Models;
 using MSVenta.Inventario.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MSVenta.Inventario.Services
@@ -17,7 +18,10 @@ namespace MSVenta.Inventario.Services
 
         public async Task<IEnumerable<Egreso>> GetAllAsync()
         {
-            return await _context.Egresos.ToListAsync();
+            return await _context.Egresos
+             .OrderByDescending(e => e.Fecha)
+              .ThenByDescending(e => e.Id)
+               .ToListAsync();
         }
 
         public async Task<Egreso> GetByIdAsync(int id)

@@ -1,19 +1,11 @@
-import { ProductoAlmacen } from "./producto-almacen,interface,";
-import { Sale } from "./sale.interface";
-
 export interface SaleDetail {
-  /// detalle de venta
   id?: number;
-  productoAlmacenId?: number;
-  productoAlmacen?: ProductoAlmacen;
-  ventaId?: number;
-  venta?: Sale;
+  idVenta?: number;
+  idProducto?: number;
+  nombreProducto?: string;
+  idAlmacen?: number;
+  nombreAlmacen?: string;
   cantidad?: number;
-  monto?: number;
-  //anterrior
-  saleDetailId?: number;
-  saleId?: number;
-  productId?: number;
-  salePrice?: number;
-  quantity?: number;
+  precioUni?: number;
+  precioSubtotal?: number;
 }

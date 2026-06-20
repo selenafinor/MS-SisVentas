@@ -1,71 +1,64 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CustomerService } from '../service/customer.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { CustomerService } from '../service/customer.service';
 
 @Component({
   selector: 'app-customer-edit',
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    CommonModule
-  ],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './customer-edit.component.html',
   styleUrl: './customer-edit.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomerEditComponent { 
+export class CustomerEditComponent implements OnInit {
 
-  customerForm: FormGroup;
-  customerId!: number;
+  id: number = 0;
+  nombre: string = '';
+  paterno: string = '';
+  materno: string = '';
+  telefono: string = '';
+  correo: string = '';
+  nit: string = '';
+  direccion: string = '';
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private customerService: CustomerService,
-    private router: Router // Inyectar Router
-  ) {
-    this.customerForm = this.fb.group({
-      customerId: [null, Validators.required],
-      firstName: ['', Validators.required],
-      pSurname: ['', Validators.required],
-      mSurname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      company: [''],
-      phone: ['', Validators.required],
-      address: [''],
-      type: ['', Validators.required],
-    });
-  }
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    // Obtener el ID del cliente de la URL
-    this.customerId = +this.route.snapshot.paramMap.get('id')!;
-
-    // Cargar los datos del cliente
-    this.customerService.getCustomerById(this.customerId).subscribe((data) => {
-      this.customerForm.patchValue(data); // Rellena el formulario con los datos del cliente
-    });
+    const data = this.route.snapshot.data['cliente'];
+    console.log('Resolver data:', data);
+    this.id        = data.id        ?? 0;
+    this.nombre    = data.nombre    ?? '';
+    this.paterno   = data.paterno   ?? '';
+    this.materno   = data.materno   ?? '';
+    this.telefono  = data.telefono  ?? '';
+    this.correo    = data.correo    ?? '';
+    this.nit       = data.nit       ?? '';
+    this.direccion = data.direccion ?? '';
+    this.cdr.detectChanges();
   }
 
-  onSubmit() {
-    if (this.customerForm.valid) {
-      const customerId = this.customerForm.value.customerId;
-      const customerData = { ...this.customerForm.value };
-      //customerData.customerId; // Elimina `customerId` del cuerpo si no es requerido.
-
-      this.customerService.updateCustomer(customerData).subscribe({
-        next: (response: any) => {
-          console.log('Cliente actualizado:', response);
-          alert('Cliente actualizado exitosamente.');
-          this.router.navigate(['/dashboard/customer/list']); // Redirigir a la lista de clientes
-        },
-        error: (err: any) => {
-          console.error('Error al actualizar cliente:', err);
-          alert('Error al actualizar el cliente.');
-        },
-      });
-    }
+  onSubmit(): void {
+    const customerData = {
+      id: this.id,
+      nombre: this.nombre,
+      paterno: this.paterno,
+      materno: this.materno,
+      telefono: this.telefono,
+      correo: this.correo,
+      nit: this.nit,
+      direccion: this.direccion
+    };
+    this.customerService.updateCustomer(customerData).subscribe({
+      next: () => {
+        alert('Cliente actualizado exitosamente.');
+        this.router.navigate(['/dashboard/customer/list']);
+      },
+      error: () => alert('Error al actualizar el cliente.')
+    });
   }
 }

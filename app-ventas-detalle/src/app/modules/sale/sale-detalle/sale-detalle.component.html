@@ -1,0 +1,97 @@
+<div class="p-6">
+
+  <!-- Encabezado -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-200">Notas de Venta</h2>
+      <p class="text-gray-400 text-sm">Gestión de ventas</p>
+    </div>
+    <button (click)="volver()"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold transition">
+      ← Ver lista
+    </button>
+  </div>
+
+  <!-- Sin datos -->
+  <div *ngIf="!venta" class="text-center py-10 text-gray-400">
+    Cargando...
+  </div>
+
+  <!-- Detalle -->
+  <div *ngIf="venta" class="bg-gray-800 rounded-xl shadow-lg p-6">
+
+    <!-- Cabecera -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 border-b border-gray-700 pb-6">
+      <div>
+        <p class="text-gray-400 text-xs">CÓDIGO</p>
+        <p class="text-red-400 font-bold text-lg">{{ codigo }}</p>
+      </div>
+      <div>
+        <p class="text-gray-400 text-xs">FECHA</p>
+        <p class="text-gray-200">{{ venta.fecha | date:'dd/MM/yyyy' }}</p>
+      </div>
+      <div>
+        <p class="text-gray-400 text-xs">HORA</p>
+        <p class="text-gray-200">{{ venta.hora }}</p>
+      </div>
+      <div>
+        <p class="text-gray-400 text-xs">ESTADO</p>
+        <p [class]="getEstadoClass(venta.estado!)">{{ venta.estado }}</p>
+      </div>
+      <div>
+        <p class="text-gray-400 text-xs">CLIENTE</p>
+        <p class="text-gray-200">{{ venta.cliente?.nombre }} {{ venta.cliente?.paterno }}</p>
+      </div>
+      <div>
+        <p class="text-gray-400 text-xs">TIPO PAGO</p>
+        <p class="text-green-400 font-semibold uppercase">{{ venta.tipoPago }}</p>
+      </div>
+      <div>
+        <p class="text-gray-400 text-xs">TOTAL</p>
+        <p class="text-green-400 font-bold text-lg">Bs. {{ venta.montoTotal | number:'1.2-2' }}</p>
+      </div>
+      <div>
+        <p class="text-gray-400 text-xs">GLOSA</p>
+        <p class="text-gray-200">{{ venta.glosa || '—' }}</p>
+      </div>
+      <div>
+          <p class="text-gray-400 text-xs">USUARIO</p>
+          <p class="text-gray-200">{{ nombreUsuario }}</p>
+       </div>
+    </div>
+
+   
+    <!-- Tabla artículos -->
+    <h3 class="text-gray-200 font-bold mb-3">Artículos</h3>
+
+    <div *ngIf="!venta.detalles || venta.detalles.length === 0"
+         class="text-center py-6 text-gray-400">
+      No hay artículos en esta venta.
+    </div>
+
+    <table *ngIf="venta.detalles && venta.detalles.length > 0" class="w-full text-sm">
+      <thead>
+        <tr class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
+          <th class="px-4 py-3 text-left">ARTÍCULO</th>
+          <th class="px-4 py-3 text-left">ALMACÉN</th>
+          <th class="px-4 py-3 text-left">CANTIDAD</th>
+          <th class="px-4 py-3 text-left">PRECIO UNIT.</th>
+          <th class="px-4 py-3 text-left">SUBTOTAL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detalle of venta.detalles"
+            class="border-t border-gray-700 hover:bg-gray-700 transition">
+          <td class="px-4 py-3 text-gray-200">{{ detalle.nombreProducto }}</td>
+          <td class="px-4 py-3 text-gray-300">{{ detalle.nombreAlmacen }}</td>
+          <td class="px-4 py-3 text-gray-300">{{ detalle.cantidad }}</td>
+          <td class="px-4 py-3 text-gray-300">Bs. {{ detalle.precioUni | number:'1.2-2' }}</td>
+          <td class="px-4 py-3 text-green-400 font-semibold">Bs. {{ detalle.precioSubtotal | number:'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+

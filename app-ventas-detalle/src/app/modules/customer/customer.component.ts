@@ -12,6 +12,6 @@ import { RouterModule } from '@angular/router';
 ],
   templateUrl: './customer.component.html',
   styleUrl: './customer.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class CustomerComponent { }

@@ -1,89 +1,87 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Customer } from '../../../interfaces/customer.interface';
 import { environment } from '../../../../environments/environment.development';
+import { Customer } from '../../../interfaces/customer.interface';
 
-const httpOptions = (token: string) => ({
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`  // Asegúrate de enviar el token en el formato correcto
-  })
-});
+function httpOptions(token: string) {
+  return {
+    headers: new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    })
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
-  apiCustomer = `${environment.URL_SERVICIOS}/cliente`;
+  private apiUrl = `${environment.URL_SERVICIOS}/cliente`;
 
   constructor(private http: HttpClient) { }
 
-  public getCustomerAll(): Observable<Customer[]> {
-    const token = sessionStorage.getItem('token');  // Obtener el token del localStorage
-    console.log('Token usado:', token); // Verificar el token
-    if (token) {
-      return this.http.get<Customer[]>(this.apiCustomer, httpOptions(token)).pipe(
-        catchError(this.handleError('getCustomerAll', []))
-      );
-    } else {
-      return of([]);  // Si no hay token, devuelve un array vacío
-    }
-  }
   // Obtener todos los clientes
-  public getCustomerById(customerId:number): Observable<Customer | never[]> {
-    const token = sessionStorage.getItem('token');  // Obtener el token del localStorage
-    console.log('Token usado:', token); // Verificar el token
-    if (token) {
-      return this.http.get<Customer>(`${this.apiCustomer}/${customerId}`, httpOptions(token)).pipe(
-        catchError(this.handleError('getCustomerById', []))
-      );
-    } else {
-      return of();  // Si no hay token, devuelve un array vacío
-    }
+  getCustomerAll(): Observable<Customer[]> {
+    const token = sessionStorage.getItem('token');
+    if (!token) return of([]);
+    return this.http.get<Customer[]>(this.apiUrl, httpOptions(token))
+      .pipe(catchError(this.handleError<Customer[]>('getCustomerAll', [])));
   }
 
-    // Crear un nuevo cliente
-    public createCustomer(customer: Customer): Observable<Customer> {
-      const token = sessionStorage.getItem('token');  // Obtener el token del localStorage
-      if (token) {
-        return this.http.post<Customer>(this.apiCustomer, customer, httpOptions(token)).pipe(
-          catchError(this.handleError('createCustomer', customer))
-        );
-      } else {
-        return of(customer);  // Si no hay token, devuelve el cliente sin cambios
-      }
-    }
-
-  // Actualizar un cliente
-  public updateCustomer(customer: Customer): Observable<Customer> {
-    const token = sessionStorage.getItem('token');  // Obtener el token del localStorage
-    console.log("Update:",customer);
-    if (token) {
-      return this.http.put<Customer>(`${this.apiCustomer}/${customer.customerId}`, customer, httpOptions(token)).pipe(
-        catchError(this.handleError('updateCustomer', customer))
-      );
-    } else {
-      return of(customer);  // Si no hay token, devuelve el cliente sin cambios
-    }
+  // Obtener cliente por id
+  getCustomerById(id: number): Observable<Customer> {
+    const token = sessionStorage.getItem('token');
+    if (!token) return of({});
+    return this.http.get<Customer>(`${this.apiUrl}/${id}`, httpOptions(token))
+      .pipe(catchError(this.handleError<Customer>('getCustomerById', {})));
   }
 
-  // Eliminar un cliente
-  public deleteCustomer(idCustomer: number): Observable<any> {
-    const token = sessionStorage.getItem('token');  // Obtener el token del localStorage
-      return this.http.delete(`${this.apiCustomer}/${idCustomer}`, httpOptions(token!)).pipe(
-        catchError((error)=>{
-          return throwError(error.error.message || 'Error desconocido');
-        })
-      );
+  // Buscar clientes por nombre o NIT
+  buscarClientes(termino: string): Observable<Customer[]> {
+    const token = sessionStorage.getItem('token');
+    if (!token) return of([]);
+    return this.http.get<Customer[]>(`${this.apiUrl}/buscar/${termino}`, httpOptions(token))
+      .pipe(catchError(this.handleError<Customer[]>('buscarClientes', [])));
+  }
 
+  // Crear cliente
+  createCustomer(customer: Customer): Observable<Customer> {
+    const token = sessionStorage.getItem('token');
+    if (!token) return of({});
+    return this.http.post<Customer>(this.apiUrl, customer, httpOptions(token))
+      .pipe(catchError(this.handleError<Customer>('createCustomer', {})));
+  }
+
+  // Actualizar cliente
+  updateCustomer(customer: Customer): Observable<Customer> {
+    const token = sessionStorage.getItem('token');
+    if (!token) return of({});
+    return this.http.put<Customer>(`${this.apiUrl}/${customer.id}`, customer, httpOptions(token))
+      .pipe(catchError(this.handleError<Customer>('updateCustomer', {})));
+  }
+
+  // Habilitar/deshabilitar cliente
+  toggleEstado(id: number): Observable<any> {
+    const token = sessionStorage.getItem('token');
+    if (!token) return of({});
+    return this.http.put<any>(`${this.apiUrl}/${id}/toggle`, {}, httpOptions(token))
+      .pipe(catchError(this.handleError<any>('toggleEstado', {})));
+  }
+
+  // Eliminar cliente
+  deleteCustomer(id: number): Observable<any> {
+    const token = sessionStorage.getItem('token');
+    if (!token) return of({});
+    return this.http.delete<any>(`${this.apiUrl}/${id}`, httpOptions(token))
+      .pipe(catchError(this.handleError<any>('deleteCustomer', {})));
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(error); // Loguea el error para depuración
-      return of(result as T); // Retorna el resultado predeterminado
+      console.error(`${operation} failed:`, error);
+      return of(result as T);
     };
   }
-
 }

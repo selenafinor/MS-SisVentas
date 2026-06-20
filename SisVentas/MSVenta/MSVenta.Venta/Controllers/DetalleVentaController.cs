@@ -1,58 +1,77 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MSVenta.Venta.Models;
 using MSVenta.Venta.Services;
-using System.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
 
 namespace MSVenta.Venta.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DetalleVentaController : Controller
+    public class DetalleVentaController : ControllerBase
     {
-        private readonly IDetalleVentaService _detalleService;
+        private readonly IDetalleVentaService _service;
 
-        public DetalleVentaController(IDetalleVentaService detalleService) => _detalleService = detalleService;
+        public DetalleVentaController(IDetalleVentaService service)
+        {
+            _service = service;
+        }
 
+        // GET api/detalleventa
         [HttpGet]
-        public async Task<IActionResult> GetAll() => Ok(await _detalleService.GetAllDetalles());
+        public async Task<IActionResult> GetAll()
+        {
+            var detalles = await _service.GetAllDetalles();
+            return Ok(detalles);
+        }
 
-        
+        // GET api/detalleventa/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id) => Ok(await _detalleService.GetDetallesPorVenta(id));
-        //public async Task<IActionResult> Get(int id) => Ok(await _detalleService.GetDetalle(id));
+        public async Task<IActionResult> GetById(int id)
+        {
+            var detalle = await _service.GetDetalle(id);
+            if (detalle == null) return NotFound();
+            return Ok(detalle);
+        }
 
+        // GET api/detalleventa/venta/5
+        [HttpGet("venta/{ventaId}")]
+        public async Task<IActionResult> GetByVenta(int ventaId)
+        {
+            var detalles = await _service.GetDetallesPorVenta(ventaId);
+            return Ok(detalles);
+        }
+
+        // POST api/detalleventa
         [HttpPost]
-        public async Task<IActionResult> Create(DetalleVenta detalle)
+        public async Task<IActionResult> Create([FromBody] DetalleVenta detalle)
         {
             try
             {
-                await _detalleService.CreateDetalle(detalle);
-                return CreatedAtAction(nameof(Get), new { id = detalle.Id }, detalle);
+                await _service.CreateDetalle(detalle);
+                return Ok(detalle);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { mensaje = ex.Message });
             }
         }
 
+        // PUT api/detalleventa/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, DetalleVenta detalle)
+        public async Task<IActionResult> Update(int id, [FromBody] DetalleVenta detalle)
         {
             if (id != detalle.Id) return BadRequest();
-            await _detalleService.UpdateDetalle(detalle);
-            return NoContent();
+            await _service.UpdateDetalle(detalle);
+            return Ok(detalle);
         }
 
+        // DELETE api/detalleventa/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _detalleService.DeleteDetalle(id);
-            return NoContent();
-        }
-        public IActionResult Index()
-        {
-            return View();
+            await _service.DeleteDetalle(id);
+            return Ok();
         }
     }
 }
