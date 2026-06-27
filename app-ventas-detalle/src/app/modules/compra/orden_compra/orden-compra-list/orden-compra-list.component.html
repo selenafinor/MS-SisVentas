@@ -1,0 +1,108 @@
+<div class="overflow-x-auto mt-6 min-h-screen pr-6">
+
+  <!-- Encabezado -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-200">Órdenes de Compra</h2>
+      <p class="text-gray-400 text-sm">Gestión de órdenes a proveedores</p>
+    </div>
+    <a routerLink="/dashboard/compra/orden-compra/add"
+       class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold transition">
+      + Nueva Orden
+    </a>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage"
+       class="mb-4 p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 rounded-lg">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Tabla -->
+  <div class="bg-gray-800 border border-none rounded-xl shadow-lg w-full">
+    <div class="flex justify-between items-center px-6 py-4 border-b border-gray-700">
+      <h3 class="font-bold text-gray-200">Órdenes</h3>
+      <span class="text-sm text-gray-400">{{ ordenes.length }} registros</span>
+    </div>
+
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
+          <th class="px-4 py-3 text-left font-bold">FECHA</th>
+          <th class="px-4 py-3 text-left font-bold">PROVEEDOR</th>
+          <th class="px-4 py-3 text-left font-bold">TOTAL</th>
+          <th class="px-4 py-3 text-left font-bold">ESTADO</th>
+          <th class="px-4 py-3 text-left font-bold">ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let orden of ordenes">
+          <!-- Fila principal -->
+          <tr class="border-t border-gray-700 hover:bg-gray-700 transition-all duration-300">
+            <td class="px-4 py-3 text-gray-300">{{ orden.fecha | date:'dd/MM/yyyy' }}</td>
+            <td class="px-4 py-3 text-gray-200">{{ orden.proveedor?.nombre || '—' }}</td>
+            <td class="px-4 py-3 text-green-400 font-semibold">Bs. {{ orden.total | number:'1.2-2' }}</td>
+            <td class="px-4 py-3">
+              <span [class]="getEstadoClass(orden.estado!)">{{ orden.estado }}</span>
+            </td>
+            <td class="px-4 py-3 flex gap-2 flex-wrap">
+              <button (click)="toggleDetalle(orden.id!)"
+                      class="border border-gray-400 text-gray-400 hover:bg-gray-600 px-3 py-1 rounded text-xs font-semibold transition">
+                {{ ordenExpandida === orden.id ? 'Ocultar' : 'Ver artículos' }}
+              </button>
+              <button *ngIf="orden.estado === 'pendiente'"
+                      (click)="aprobarOrden(orden.id!)"
+                      class="border border-green-400 text-green-400 hover:bg-green-900 px-3 py-1 rounded text-xs font-semibold transition">
+                Aprobar
+              </button>
+            </td>
+          </tr>
+
+          <!-- Fila expandible de artículos -->
+          <tr *ngIf="ordenExpandida === orden.id">
+            <td colspan="5" class="bg-gray-900 px-8 py-4">
+              <p class="text-gray-400 text-xs font-bold mb-2 uppercase">
+                Artículos de la orden #{{ orden.id }}
+              </p>
+              <table class="w-full text-xs">
+                <thead>
+                  <tr class="text-gray-400 border-b border-gray-700">
+                    <th class="text-left py-1 px-2">ARTÍCULO</th>
+                    <th class="text-left py-1 px-2">CANTIDAD</th>
+                    <th class="text-left py-1 px-2">P. UNIT.</th>
+                    <th class="text-left py-1 px-2">SUBTOTAL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let d of orden.detalles"
+                      class="border-t border-gray-800 text-gray-300">
+                    <td class="py-2 px-2">{{ d.nombreProducto }}</td>
+                    <td class="py-2 px-2">{{ d.cantidad }}</td>
+                    <td class="py-2 px-2">Bs. {{ d.precioUni | number:'1.2-2' }}</td>
+                    <td class="py-2 px-2 text-green-400">Bs. {{ d.subTotal | number:'1.2-2' }}</td>
+                  </tr>
+                  <!-- Fila de total -->
+                <tr *ngIf="orden.detalles && orden.detalles.length > 0"
+                    class="border-t-2 border-gray-600">
+                  <td colspan="3" class="py-2 px-2 text-right text-gray-400 font-bold">Total:</td>
+                  <td class="py-2 px-2 text-green-400 font-bold">Bs. {{ orden.total | number:'1.2-2' }}</td>
+                </tr>
+
+                <tr *ngIf="!orden.detalles || orden.detalles.length === 0">
+                  <td colspan="4" class="text-center py-3 text-gray-500">Sin artículos.</td>
+                </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </ng-container>
+
+        <tr *ngIf="ordenes.length === 0">
+          <td colspan="5" class="text-center py-8 text-gray-400">
+            No hay órdenes registradas.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ProveedorService } from '../service/proveedor.service';
-import { Proveedor } from '../../../interfaces/proveedor.interface';
+import { ProveedorService } from '../../service/proveedor.service';
+import { Proveedor } from '../../../../interfaces/proveedor.interface';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { CatalogoProveedorService } from '../../service/catalogo-proveedor.service';
+import { CatalogoProveedor } from '../../../../interfaces/catalogo-proveedor.interface';
 
 @Component({
   selector: 'app-proveedor-list',
@@ -14,10 +16,15 @@ import { RouterModule } from '@angular/router';
 export class ProveedorListComponent implements OnInit {
   proveedores: Proveedor[] = [];
   errorMessage: string = '';
-
+  proveedorExpandido: number | null = null;
+  catalogoActual: CatalogoProveedor[] = [];
+  cargandoCatalogo: boolean = false;
   constructor(
     private proveedorService: ProveedorService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private catalogoService: CatalogoProveedorService,
+    
+    
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +54,21 @@ export class ProveedorListComponent implements OnInit {
   toggleEstado(id: number): void {
     this.proveedorService.toggleEstado(id).subscribe(() => {
       this.loadProveedores();
+    });
+  }
+  toggleCatalogo(id: number): void {
+    if (this.proveedorExpandido === id) {
+      this.proveedorExpandido = null;
+      this.catalogoActual = [];
+      this.cdr.markForCheck();
+      return;
+    }
+    this.proveedorExpandido = id;
+    this.cargandoCatalogo = true;
+    this.catalogoService.getByProveedor(id).subscribe(data => {
+      this.catalogoActual = data;
+      this.cargandoCatalogo = false;
+      this.cdr.markForCheck();
     });
   }
 }

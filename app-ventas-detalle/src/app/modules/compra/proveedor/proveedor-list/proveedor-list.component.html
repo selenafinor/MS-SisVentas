@@ -1,0 +1,126 @@
+<div class="overflow-x-auto mt-6 min-h-screen pr-6">
+
+  <!-- Encabezado -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-200">Gestión de Proveedores</h2>
+      <p class="text-gray-400 text-sm">Administrá los proveedores del sistema</p>
+    </div>
+    <a routerLink="/dashboard/compra/proveedor/add"
+      class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold transition">
+        + Nuevo Proveedor
+    </a>
+  </div>
+
+  <!-- Mensaje error -->
+  <div *ngIf="errorMessage"
+       class="mb-4 p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 rounded-lg flex justify-between">
+    <span>{{ errorMessage }}</span>
+    <button (click)="errorMessage = ''" class="font-bold">&times;</button>
+  </div>
+
+  <!-- Tabla -->
+  <div class="bg-gray-800 border border-none rounded-xl shadow-lg w-full">
+    <div class="flex justify-between items-center px-6 py-4 border-b border-gray-700">
+      <h3 class="font-bold text-gray-200">Proveedores</h3>
+      <span class="text-sm text-gray-400">{{ proveedores.length }} registros</span>
+    </div>
+
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
+          <th class="px-4 py-3 text-left font-bold">NOMBRE</th>
+          <th class="px-4 py-3 text-left font-bold">CONTACTO</th>
+          <th class="px-4 py-3 text-left font-bold">TELÉFONO</th>
+          <th class="px-4 py-3 text-left font-bold">NIT</th>
+          <th class="px-4 py-3 text-left font-bold">ESTADO</th>
+          <th class="px-4 py-3 text-left font-bold">ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <ng-container *ngFor="let proveedor of proveedores">
+
+          <!-- Fila del proveedor -->
+          <tr class="border-t border-gray-700 hover:bg-gray-700 transition-all duration-300">
+            <td class="px-4 py-3 text-gray-200">{{ proveedor.nombre }}</td>
+            <td class="px-4 py-3 text-gray-300">{{ proveedor.contacto }}</td>
+            <td class="px-4 py-3 text-gray-300">{{ proveedor.telefono }}</td>
+            <td class="px-4 py-3 text-gray-300">{{ proveedor.nit }}</td>
+            <td class="px-4 py-3">
+              <span [class]="proveedor.estado === 'activo'
+                ? 'text-green-400 font-semibold'
+                : 'text-red-400 font-semibold'">
+                {{ proveedor.estado }}
+              </span>
+            </td>
+            <td class="px-4 py-3 flex gap-2">
+              <a [routerLink]="['/dashboard/compra/proveedor/edit', proveedor.id]"
+                 class="border border-blue-400 text-blue-400 hover:bg-blue-900 px-3 py-1 rounded text-xs font-semibold transition">
+                Editar
+              </a>
+              <button (click)="toggleEstado(proveedor.id!)"
+                      [class]="proveedor.estado === 'activo'
+                        ? 'border border-red-400 text-red-400 hover:bg-red-900 px-3 py-1 rounded text-xs font-semibold transition'
+                        : 'border border-green-400 text-green-400 hover:bg-green-900 px-3 py-1 rounded text-xs font-semibold transition'">
+                {{ proveedor.estado === 'activo' ? 'Deshabilitar' : 'Habilitar' }}
+              </button>
+              <button (click)="toggleCatalogo(proveedor.id!)"
+                      class="border border-purple-400 text-purple-400 hover:bg-purple-900 px-3 py-1 rounded text-xs font-semibold transition">
+                {{ proveedorExpandido === proveedor.id ? 'Ocultar' : 'Ver catálogo' }}
+              </button>
+            </td>
+          </tr>
+
+          <!-- Fila expandible del catálogo -->
+          <tr *ngIf="proveedorExpandido === proveedor.id">
+            <td colspan="6" class="bg-gray-900 px-8 py-4">
+              <p class="text-purple-400 text-xs font-bold mb-3 uppercase">
+                Artículos disponibles — {{ proveedor.nombre }}
+              </p>
+              <div *ngIf="cargandoCatalogo" class="text-gray-400 text-xs">Cargando...</div>
+              <table *ngIf="!cargandoCatalogo" class="w-full text-xs">
+                <thead>
+                  <tr class="text-gray-400 border-b border-gray-700">
+                    <th class="text-left py-1 px-2">ARTÍCULO</th>
+                    <th class="text-left py-1 px-2">PRECIO UNIT.</th>
+                    <th class="text-left py-1 px-2">STOCK REF.</th>
+                    <th class="text-left py-1 px-2">ESTADO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of catalogoActual"
+                      class="border-t border-gray-800 text-gray-300">
+                    <td class="py-2 px-2">{{ item.nombreProducto }}</td>
+                    <td class="py-2 px-2 text-green-400">Bs. {{ item.precioUnitario | number:'1.2-2' }}</td>
+                    <td class="py-2 px-2">{{ item.stockDisponible }}</td>
+                    <td class="py-2 px-2">
+                      <span [class]="item.estado === 'activo' ? 'text-green-400' : 'text-red-400'">
+                        {{ item.estado }}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr *ngIf="catalogoActual.length === 0">
+                    <td colspan="4" class="text-center py-3 text-gray-500">
+                      Sin artículos en el catálogo.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+
+        </ng-container>
+
+        <!-- Fila vacía -->
+        <tr *ngIf="proveedores.length === 0">
+          <td colspan="6" class="text-center py-8 text-gray-400">
+            No hay proveedores registrados.
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+</div>

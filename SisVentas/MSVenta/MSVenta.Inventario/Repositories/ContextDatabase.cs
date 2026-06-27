@@ -19,7 +19,7 @@ namespace MSVenta.Inventario.Repositories
         public DbSet<DetalleEgreso> DetallesEgreso { get; set; }
         public DbSet<Traspaso> Traspasos { get; set; }
         public DbSet<DetalleTraspaso> DetallesTraspaso { get; set; }
-
+        public DbSet<GesPrecio> GesPrecios { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Nombres de tablas
@@ -106,6 +106,12 @@ namespace MSVenta.Inventario.Repositories
                 .HasOne(dt => dt.ArticuloAlmacen)
                 .WithMany()
                 .HasForeignKey(dt => dt.Id_ArticuloAlmacen);
+            modelBuilder.Entity<GesPrecio>().ToTable("ges_precio");
+
+            modelBuilder.Entity<GesPrecio>()
+                .HasOne(g => g.Articulo)
+                .WithMany()
+                .HasForeignKey(g => g.Id_Articulo);
         }
     }
 }

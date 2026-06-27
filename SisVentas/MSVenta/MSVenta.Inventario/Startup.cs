@@ -35,7 +35,10 @@ namespace MSVenta.Inventario
 
             services.AddDbContext<ContextDatabase>(opt =>
             {
-                opt.UseMySQL(Configuration["mysql:cn"]);
+                opt.UseMySql(
+                    Configuration["mysql:cn"],
+                    ServerVersion.AutoDetect(Configuration["mysql:cn"])
+                );
             });
 
             services.AddScoped<IArticuloService, ArticuloService>();
@@ -46,6 +49,7 @@ namespace MSVenta.Inventario
             services.AddScoped<IDetalleIngresoService, DetalleIngresoService>();
             services.AddHostedService<VentaConsumerService>();
             services.AddHostedService<CompraConsumerService>();
+            services.AddHostedService<AdquisicionConsumerService>();
             services.AddScoped<IArticuloAlmacenService, ArticuloAlmacenService>();
             services.AddScoped<ICategoriaService, CategoriaService>();
             services.AddScoped<IDetalleTraspasoService, DetalleTraspasoService>();

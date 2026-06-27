@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using MySql.EntityFrameworkCore.Metadata;
 
 namespace MSVenta.Inventario.Migrations
 {
@@ -12,8 +11,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "almacen",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Nombre = table.Column<string>(type: "text", nullable: true),
                     Descripcion = table.Column<string>(type: "text", nullable: true),
                     Direccion = table.Column<string>(type: "text", nullable: true),
@@ -29,8 +27,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "categoria",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Nombre = table.Column<string>(type: "text", nullable: true),
                     Descripcion = table.Column<string>(type: "text", nullable: true),
                     Estado = table.Column<string>(type: "text", nullable: true)
@@ -44,8 +41,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "marca",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Nombre = table.Column<string>(type: "text", nullable: true),
                     Descripcion = table.Column<string>(type: "text", nullable: true),
                     Estado = table.Column<string>(type: "text", nullable: true)
@@ -59,8 +55,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "nota_egreso",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Fecha = table.Column<DateTime>(type: "datetime", nullable: false),
                     Glosa = table.Column<string>(type: "text", nullable: true),
                     Motivo = table.Column<string>(type: "text", nullable: true),
@@ -76,8 +71,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "nota_ingreso",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Fecha = table.Column<DateTime>(type: "datetime", nullable: false),
                     Glosa = table.Column<string>(type: "text", nullable: true),
                     Motivo = table.Column<string>(type: "text", nullable: true),
@@ -93,8 +87,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "unidad_medida",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Nombre = table.Column<string>(type: "text", nullable: true),
                     Abreviatura = table.Column<string>(type: "text", nullable: true),
                     Estado = table.Column<string>(type: "text", nullable: true)
@@ -108,8 +101,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "traspaso",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Fecha = table.Column<DateTime>(type: "datetime", nullable: false),
                     Glosa = table.Column<string>(type: "text", nullable: true),
                     Estado = table.Column<string>(type: "text", nullable: true),
@@ -138,8 +130,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "articulo",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Nombre = table.Column<string>(type: "text", nullable: true),
                     Descripcion = table.Column<string>(type: "text", nullable: true),
                     Precio = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
@@ -175,8 +166,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "articulo_almacen",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Stock = table.Column<int>(type: "int", nullable: false),
                     StockMin = table.Column<int>(type: "int", nullable: false),
                     StockMax = table.Column<int>(type: "int", nullable: false),
@@ -204,8 +194,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "detalle_egreso",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
                     Observacion = table.Column<string>(type: "text", nullable: true),
                     Id_Egreso = table.Column<int>(type: "int", nullable: false),
@@ -232,8 +221,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "detalle_ingreso",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
                     PrecioCompra = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
                     Observacion = table.Column<string>(type: "text", nullable: true),
@@ -261,8 +249,7 @@ namespace MSVenta.Inventario.Migrations
                 name: "detalle_traspaso",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
                     Id_Traspaso = table.Column<int>(type: "int", nullable: false),
                     Id_ArticuloAlmacen = table.Column<int>(type: "int", nullable: false)

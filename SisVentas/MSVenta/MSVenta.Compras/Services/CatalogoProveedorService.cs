@@ -67,5 +67,12 @@ namespace MSVenta.Compras.Services
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<IEnumerable<CatalogoProveedor>> GetByProductoIdAsync(int productoId)
+        {
+            return await _context.CatalogoProveedores
+                .Include(c => c.Proveedor)
+                .Where(c => c.ProductoId == productoId && c.Estado == "activo")
+                .ToListAsync();
+        }
     }
 }

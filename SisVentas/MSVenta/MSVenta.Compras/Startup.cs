@@ -41,6 +41,8 @@ namespace MSVenta.Compras
             services.AddScoped<INotaCompraService, NotaCompraService>();
             services.AddSingleton<RabbitMqPublisher>();
             services.AddScoped<ICatalogoProveedorService, CatalogoProveedorService>();
+            services.AddScoped<IOrdenCompraService, OrdenCompraService>();
+            services.AddScoped<IAdquisicionService, AdquisicionService>();
 
             services.AddCors(options =>
             {

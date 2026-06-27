@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProveedorService } from '../service/proveedor.service';
+import { ProveedorService } from '../../service/proveedor.service';
 
 @Component({
   selector: 'app-proveedor-edit',

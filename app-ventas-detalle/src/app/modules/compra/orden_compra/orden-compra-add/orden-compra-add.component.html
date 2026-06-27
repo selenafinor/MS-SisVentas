@@ -1,0 +1,156 @@
+<div class="p-6">
+
+  <!-- Encabezado -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-200">Nueva Orden de Compra</h2>
+      <p class="text-gray-400 text-sm">Gestión de compras</p>
+    </div>
+    <a routerLink="/dashboard/compra/orden-compra/list"
+       class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold transition">
+      ← Ver lista
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- Panel izquierdo: Buscador de artículos -->
+    <div class="lg:col-span-2 bg-gray-800 rounded-xl shadow-lg p-5">
+      <h3 class="font-bold text-gray-200 mb-4">🔍 Agregar Artículo</h3>
+
+      <!-- Artículo seleccionado -->
+      <div *ngIf="articuloSeleccionado; else buscarBloque">
+        <div class="flex justify-between items-center bg-gray-700 border border-blue-500 rounded-lg px-4 py-3 mb-4">
+          <div>
+            <p class="font-bold text-gray-200">{{ articuloSeleccionado.nombre }}</p>
+            <p class="text-xs text-gray-400">Selecciona el proveedor que más te convenga</p>
+          </div>
+          <button (click)="cambiarArticulo()"
+                  class="text-red-400 hover:text-red-300 text-xs font-semibold">
+            Cambiar
+          </button>
+        </div>
+
+        <!-- Proveedores disponibles -->
+        <div *ngIf="cargandoProveedores" class="text-gray-400 text-sm text-center py-4">
+          Buscando proveedores...
+        </div>
+
+        <div *ngIf="!cargandoProveedores">
+          <p class="text-gray-400 text-xs font-bold mb-2 uppercase">Proveedores Disponibles</p>
+
+          <div *ngIf="proveedoresDisponibles.length === 0"
+               class="text-center py-6 text-gray-500 text-sm">
+            Ningún proveedor tiene este artículo en su catálogo.
+            <br>
+            <a routerLink="/dashboard/compra/catalogo"
+               class="text-blue-400 hover:text-blue-300 text-xs mt-1 block">
+              + Agregar al catálogo de un proveedor
+            </a>
+          </div>
+
+          <table *ngIf="proveedoresDisponibles.length > 0" class="w-full text-sm">
+            <thead>
+              <tr class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
+                <th class="px-4 py-2 text-left font-bold">PROVEEDOR</th>
+                <th class="px-4 py-2 text-left font-bold">TELÉFONO</th>
+                <th class="px-4 py-2 text-left font-bold">PRECIO UNIT.</th>
+                <th class="px-4 py-2 text-left font-bold">STOCK REF.</th>
+                <th class="px-4 py-2 text-left font-bold">ACCIÓN</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let c of proveedoresDisponibles"
+                  class="border-t border-gray-700 hover:bg-gray-700 transition">
+                <td class="px-4 py-3 text-gray-200 font-semibold">{{ c.proveedor?.nombre || '—' }}</td>
+                <td class="px-4 py-3 text-gray-300">{{ c.proveedor?.telefono || '—' }}</td>
+                <td class="px-4 py-3 text-green-400 font-bold">Bs. {{ c.precioUnitario | number:'1.2-2' }}</td>
+                <td class="px-4 py-3 text-gray-300">{{ c.stockDisponible }}</td>
+                <td class="px-4 py-3">
+                  <button (click)="seleccionarProveedor(c)"
+                          class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-semibold transition">
+                    Seleccionar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Buscador -->
+      <ng-template #buscarBloque>
+        <div class="relative">
+          <input type="text"
+                 [(ngModel)]="busquedaArticulo"
+                 (input)="filtrarArticulos()"
+                 placeholder="Escribe el nombre del artículo..."
+                 class="w-full bg-gray-700 border-2 border-gray-600 text-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-500" />
+
+          <!-- Dropdown resultados -->
+          <div *ngIf="articulosFiltrados.length > 0"
+               class="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded-lg mt-1 shadow-xl max-h-64 overflow-y-auto">
+            <div *ngFor="let a of articulosFiltrados"
+                 (click)="seleccionarArticulo(a)"
+                 class="px-4 py-3 hover:bg-gray-600 cursor-pointer border-b border-gray-600 last:border-0">
+              <p class="text-gray-200 font-semibold text-sm">{{ a.nombre }}</p>
+              <p class="text-gray-400 text-xs">Bs. {{ a.precio | number:'1.2-2' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-gray-500 text-xs mt-3 text-center">
+          Escribe el nombre del artículo que deseas pedir para ver los proveedores disponibles
+        </p>
+      </ng-template>
+    </div>
+
+    <!-- Panel derecho: Carrito -->
+    <div class="bg-gray-800 rounded-xl shadow-lg p-5 flex flex-col gap-4">
+      <h3 class="font-bold text-gray-200">📋 Orden de Compra</h3>
+
+      <!-- Glosa -->
+      <div>
+        <label class="text-sm font-semibold text-gray-400 block mb-1">Glosa</label>
+        <input type="text" [(ngModel)]="glosa" placeholder="Opcional..."
+               class="w-full bg-gray-700 border-2 border-gray-600 text-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" />
+      </div>
+
+      <!-- Artículos del carrito -->
+      <div class="flex-1">
+        <label class="text-sm font-semibold text-gray-400 block mb-2">Artículos</label>
+        <div *ngIf="carrito().length === 0" class="text-gray-500 text-xs text-center py-4">
+          Busca artículos desde la izquierda
+        </div>
+        <div *ngFor="let item of carrito(); let i = index"
+             class="border-b border-gray-700 py-2">
+          <div class="flex justify-between items-start mb-1">
+            <p class="font-semibold text-gray-200 text-sm flex-1 pr-2">{{ item.nombreProducto }}</p>
+            <button (click)="quitarDelCarrito(i)" class="text-red-400 hover:text-red-300 text-xs">✕</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="number" min="1"
+                   [value]="item.cantidad"
+                   (change)="actualizarCantidad(i, +$any($event.target).value)"
+                   class="w-16 bg-gray-700 border border-gray-600 text-gray-200 rounded px-2 py-1 text-xs" />
+            <span class="text-gray-400 text-xs">× Bs. {{ item.precioUni | number:'1.2-2' }}</span>
+            <span class="text-green-400 font-semibold text-xs ml-auto">Bs. {{ item.subTotal | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total -->
+      <div class="flex justify-between items-center border-t border-gray-700 pt-3">
+        <span class="font-bold text-gray-200">Total:</span>
+        <span class="text-green-400 font-bold text-lg">Bs. {{ total() | number:'1.2-2' }}</span>
+      </div>
+
+      <!-- Botón crear -->
+      <button (click)="crearOrden()"
+              [disabled]="cargando() || carrito().length === 0"
+              class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg font-bold transition">
+        {{ cargando() ? 'Creando...' : 'Crear Orden de Compra' }}
+      </button>
+    </div>
+  </div>
+</div>

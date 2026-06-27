@@ -67,5 +67,12 @@ namespace MSVenta.Compras.Controllers
             if (!deleted) return NotFound();
             return Ok(new { mensaje = "Eliminado correctamente" });
         }
+        // GET api/catalogoproveedor/producto/5
+        [HttpGet("producto/{productoId}")]
+        public async Task<IActionResult> GetByProducto(int productoId)
+        {
+            var items = await _service.GetByProductoIdAsync(productoId);
+            return Ok(items);
+        }
     }
 }

@@ -36,7 +36,12 @@ export class DashboardLayoutComponent implements OnInit {
   ];
 
   comprasRoutes = [
-  { path: 'compra/proveedor/list', title: 'Proveedores', permission: 'gestionar_compras' },
+    { path: '/dashboard/compra/proveedor/list', title: 'Proveedores', permission: 'gestionar_compras' },
+    { path: '/dashboard/compra/catalogo', title: 'Catálogo', permission: 'gestionar_compras' },
+    { path: '/dashboard/compra/orden-compra/list', title: 'Órdenes Compra', permission: 'gestionar_compras' },
+    { path: '/dashboard/compra/adquisicion', title: 'Adquisiciones', permission: 'gestionar_compras' },
+    { path: '/dashboard/compra/nota-compra', title: 'Notas Compra', permission: 'gestionar_compras' },
+  
 ];
 
   inventarioOpen = false;

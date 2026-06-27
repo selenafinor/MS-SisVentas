@@ -1,0 +1,146 @@
+<div class="p-6">
+
+  <!-- Encabezado -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-200">Adquisiciones</h2>
+      <p class="text-gray-400 text-sm">Recepciones de mercadería confirmadas</p>
+    </div>
+  </div>
+
+  <!-- Órdenes aprobadas pendientes -->
+  <div *ngIf="ordenesAprobadas.length > 0"
+       class="bg-yellow-900 bg-opacity-30 border border-yellow-600 rounded-xl p-5 mb-6">
+    <p class="text-yellow-400 font-bold text-sm mb-3 uppercase">
+      Órdenes aprobadas pendientes de recibir ({{ ordenesAprobadas.length }})
+    </p>
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-yellow-500 text-xs uppercase border-b border-yellow-700">
+          <th class="pb-2 text-left px-2">Orden</th>
+          <th class="pb-2 text-left px-2">Proveedor</th>
+          <th class="pb-2 text-left px-2">Fecha</th>
+          <th class="pb-2 text-left px-2">Artículos</th>
+          <th class="pb-2 text-right px-2">Total</th>
+          <th class="pb-2 text-center px-2">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let o of ordenesAprobadas">
+          <tr class="border-b border-yellow-800">
+            <td class="py-3 px-2 text-gray-300 font-medium">#{{ o.id }}</td>
+            <td class="py-3 px-2 text-gray-200 font-semibold">{{ o.proveedor?.nombre || '—' }}</td>
+            <td class="py-3 px-2 text-gray-400">{{ o.fecha | date:'dd/MM/yyyy' }}</td>
+            <td class="py-3 px-2">
+              <div class="flex flex-wrap gap-1">
+                <span *ngFor="let d of o.detalles"
+                      class="bg-yellow-900 text-yellow-400 text-xs px-2 py-0.5 rounded-full">
+                  {{ d.nombreProducto }} x{{ d.cantidad }}
+                </span>
+              </div>
+            </td>
+            <td class="py-3 px-2 text-right text-green-400 font-bold">
+              Bs. {{ o.total | number:'1.2-2' }}
+            </td>
+            <td class="py-3 px-2 text-center">
+              <div class="flex gap-2 justify-center">
+                <button (click)="toggleDetalle(o.id!)"
+                        class="border border-gray-500 text-gray-400 hover:bg-gray-700 px-3 py-1 rounded text-xs font-semibold transition">
+                  {{ ordenExpandida === o.id ? 'Ocultar' : 'Ver detalle' }}
+                </button>
+                <button (click)="generarNota(o)"
+                        class="bg-green-700 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-bold transition">
+                  Generar nota de compra
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Detalle expandible -->
+          <tr *ngIf="ordenExpandida === o.id">
+            <td colspan="6" class="bg-gray-900 px-6 py-4">
+              <p class="text-gray-400 text-xs font-bold mb-2 uppercase">Detalle de la orden #{{ o.id }}</p>
+              <table class="w-full text-xs">
+                <thead>
+                  <tr class="text-gray-500 border-b border-gray-700">
+                    <th class="text-left py-1 px-2">Artículo</th>
+                    <th class="text-center py-1 px-2">Cantidad</th>
+                    <th class="text-right py-1 px-2">Precio unit.</th>
+                    <th class="text-right py-1 px-2">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let d of o.detalles" class="border-b border-gray-800 text-gray-300">
+                    <td class="py-2 px-2">{{ d.nombreProducto }}</td>
+                    <td class="py-2 px-2 text-center">{{ d.cantidad }}</td>
+                    <td class="py-2 px-2 text-right">Bs. {{ d.precioUni | number:'1.2-2' }}</td>
+                    <td class="py-2 px-2 text-right text-green-400">Bs. {{ d.subTotal | number:'1.2-2' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Sin órdenes aprobadas -->
+  <div *ngIf="ordenesAprobadas.length === 0"
+       class="bg-green-900 bg-opacity-20 border border-green-700 rounded-xl p-4 mb-6 text-green-400 text-sm">
+    No hay órdenes aprobadas pendientes de recibir.
+  </div>
+
+  <!-- Historial de adquisiciones -->
+  <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+    <div class="flex justify-between items-center px-6 py-4 border-b border-gray-700">
+      <div>
+        <h3 class="font-bold text-gray-200">Historial de recepciones</h3>
+        <p class="text-gray-500 text-xs mt-0.5">Adquisiciones confirmadas y stock actualizado</p>
+      </div>
+      <span class="text-gray-400 text-sm">{{ adquisiciones.length }} registros</span>
+    </div>
+
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
+          <th class="px-4 py-3 text-left font-bold">FECHA</th>
+          <th class="px-4 py-3 text-left font-bold">PROVEEDOR</th>
+          <th class="px-4 py-3 text-left font-bold">ORDEN</th>
+          <th class="px-4 py-3 text-left font-bold">ARTÍCULOS RECIBIDOS</th>
+          <th class="px-4 py-3 text-center font-bold">ESTADO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of adquisiciones"
+            class="border-t border-gray-700 hover:bg-gray-700 transition">
+          <td class="px-4 py-3 text-gray-300 whitespace-nowrap">{{ a.fecha | date:'dd/MM/yyyy' }}</td>
+          <td class="px-4 py-3 text-gray-200 font-semibold whitespace-nowrap">{{ a.proveedor?.nombre || '—' }}</td>
+          <td class="px-4 py-3 text-gray-400 whitespace-nowrap">
+            {{ a.ordenId ? '#' + a.ordenId : '—' }}
+          </td>
+          <td class="px-4 py-3">
+            <div class="flex flex-wrap gap-1">
+              <span *ngFor="let d of a.detalles"
+                    class="bg-purple-900 text-purple-400 text-xs px-2 py-0.5 rounded-full">
+                {{ d.nombreProducto }} ({{ d.cantidad }})
+              </span>
+            </div>
+          </td>
+          <td class="px-4 py-3 text-center">
+            <span [class]="a.estado === 'activo'
+              ? 'text-green-400 font-semibold'
+              : 'text-red-400 font-semibold'">
+              {{ a.estado }}
+            </span>
+          </td>
+        </tr>
+        <tr *ngIf="adquisiciones.length === 0">
+          <td colspan="5" class="text-center py-10 text-gray-500">
+            No hay adquisiciones registradas aún.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

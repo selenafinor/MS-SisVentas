@@ -10,5 +10,6 @@ namespace MSVenta.Inventario.Models
         public string Motivo { get; set; }
         public string Estado { get; set; }
         public int Id_Usuario { get; set; }
+        public bool SoloRegistro { get; set; } = false;
     }
 }

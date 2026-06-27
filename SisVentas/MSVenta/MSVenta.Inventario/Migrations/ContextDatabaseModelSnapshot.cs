@@ -15,7 +15,7 @@ namespace MSVenta.Inventario.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.3");
+                .HasAnnotation("ProductVersion", "5.0.17");
 
             modelBuilder.Entity("MSVenta.Inventario.Models.Almacen", b =>
                 {
@@ -27,16 +27,16 @@ namespace MSVenta.Inventario.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Direccion")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -50,13 +50,13 @@ namespace MSVenta.Inventario.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Foto")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Id_Categoria")
                         .HasColumnType("int");
@@ -68,10 +68,10 @@ namespace MSVenta.Inventario.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<decimal>("Precio")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 
@@ -121,13 +121,13 @@ namespace MSVenta.Inventario.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -150,7 +150,7 @@ namespace MSVenta.Inventario.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Observacion")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -177,10 +177,10 @@ namespace MSVenta.Inventario.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Observacion")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<decimal>("PrecioCompra")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 
@@ -222,23 +222,51 @@ namespace MSVenta.Inventario.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Glosa")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Id_Usuario")
                         .HasColumnType("int");
 
                     b.Property<string>("Motivo")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.ToTable("nota_egreso");
+                });
+
+            modelBuilder.Entity("MSVenta.Inventario.Models.GesPrecio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Id_Articulo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MetodoInventario")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("PrecioCompra")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("PrecioVenta")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id_Articulo");
+
+                    b.ToTable("ges_precio");
                 });
 
             modelBuilder.Entity("MSVenta.Inventario.Models.Ingreso", b =>
@@ -248,19 +276,22 @@ namespace MSVenta.Inventario.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Glosa")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Id_Usuario")
                         .HasColumnType("int");
 
                     b.Property<string>("Motivo")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("SoloRegistro")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
@@ -274,13 +305,13 @@ namespace MSVenta.Inventario.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -294,13 +325,13 @@ namespace MSVenta.Inventario.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Glosa")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Id_AlmacenDestino")
                         .HasColumnType("int");
@@ -327,13 +358,13 @@ namespace MSVenta.Inventario.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Abreviatura")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -441,6 +472,17 @@ namespace MSVenta.Inventario.Migrations
                     b.Navigation("ArticuloAlmacen");
 
                     b.Navigation("Traspaso");
+                });
+
+            modelBuilder.Entity("MSVenta.Inventario.Models.GesPrecio", b =>
+                {
+                    b.HasOne("MSVenta.Inventario.Models.Articulo", "Articulo")
+                        .WithMany()
+                        .HasForeignKey("Id_Articulo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Articulo");
                 });
 
             modelBuilder.Entity("MSVenta.Inventario.Models.Traspaso", b =>

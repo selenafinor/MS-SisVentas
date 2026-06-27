@@ -17,5 +17,7 @@ namespace MSVenta.Compras.Models
 
         public ICollection<NotaCompra> NotasCompra { get; set; }
         public ICollection<CatalogoProveedor> Catalogo { get; set; }
+        public ICollection<OrdenCompra> Ordenes { get; set; }
+        public ICollection<Adquisicion> Adquisiciones { get; set; }
     }
 }

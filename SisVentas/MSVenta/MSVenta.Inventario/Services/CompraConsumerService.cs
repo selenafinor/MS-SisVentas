@@ -84,7 +84,8 @@ namespace MSVenta.Inventario.Services
                 Glosa = $"Ingreso por compra #{evento.CompraId}",
                 Motivo = "compra",
                 Estado = "activo",
-                Id_Usuario = evento.UsuarioId
+                Id_Usuario = evento.UsuarioId,
+                SoloRegistro = true
             };
             context.Ingresos.Add(ingreso);
             await context.SaveChangesAsync();
@@ -101,13 +102,6 @@ namespace MSVenta.Inventario.Services
                     Id_ArticuloAlmacen = d.IdProducto
                 };
                 context.DetallesIngreso.Add(detalleIngreso);
-
-                var articuloAlmacen = await context.ArticulosAlmacenes
-                    .FirstOrDefaultAsync(aa => aa.Id == d.IdProducto);
-                if (articuloAlmacen != null)
-                {
-                    articuloAlmacen.Stock += (int)d.Cantidad;
-                }
             }
 
             await context.SaveChangesAsync();

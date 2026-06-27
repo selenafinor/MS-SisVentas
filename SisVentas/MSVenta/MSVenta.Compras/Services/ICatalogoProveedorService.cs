@@ -12,5 +12,7 @@ namespace MSVenta.Compras.Services
         Task<CatalogoProveedor> AddAsync(CatalogoProveedor item);
         Task<bool> UpdateAsync(CatalogoProveedor item);
         Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<CatalogoProveedor>> GetByProductoIdAsync(int productoId);
+
     }
 }
