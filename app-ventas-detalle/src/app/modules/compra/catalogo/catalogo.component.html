@@ -66,7 +66,7 @@
     <div class="flex items-center gap-4 mb-4 pb-3 border-b border-gray-700">
       <div class="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center text-2xl">📦</div>
       <div>
-        <h3 class="text-gray-200 font-bold">{{ itemSeleccionado.nombreProducto }}</h3>
+        <h3 class="text-gray-200 font-bold">{{ getNombreArticulo(itemSeleccionado.productoId)}}</h3>
         <p class="text-gray-400 text-xs">{{ getNombreProveedor(itemSeleccionado.proveedorId!) }}</p>
       </div>
     </div>
@@ -140,14 +140,21 @@
            class="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden hover:border-gray-500 transition"
            [class.opacity-60]="item.estado === 'inactivo'">
 
-        <!-- Imagen placeholder -->
-        <div class="w-full h-28 bg-gray-700 flex items-center justify-center text-4xl">
-          📦
-        </div>
-
+        <!-- Imagen del artículo -->
+          <div class="w-full h-28 bg-gray-700 flex items-center justify-center overflow-hidden">
+             <ng-container *ngIf="getImagenUrl(item.productoId); else placeholder">
+                <img [src]="getImagenUrl(item.productoId)"
+                  (error)="onImageError($event)"
+                  class="w-full h-full object-cover"
+                  alt="{{ getNombreArticulo(item.productoId) }}" />
+            </ng-container>
+           <ng-template #placeholder>
+           <span class="text-4xl">📦</span>
+          </ng-template>
+          </div>
         <!-- Info -->
         <div class="p-3">
-          <p class="text-gray-200 font-bold text-sm truncate">{{ item.nombreProducto }}</p>
+          <p class="text-gray-200 font-bold text-sm truncate">{{ getNombreArticulo(item.productoId) }}</p>
           <p class="text-gray-500 text-xs truncate mb-2">{{ getNombreProveedor(item.proveedorId!) }}</p>
           <div class="flex justify-between items-center">
             <span class="text-blue-400 font-bold text-sm">Bs. {{ item.precioUnitario | number:'1.2-2' }}</span>

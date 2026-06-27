@@ -75,7 +75,7 @@ namespace MSVenta.Compras.Repositories
                 entity.Property(e => e.PrecioUnitario).HasColumnName("precio_unitario");
                 entity.Property(e => e.StockDisponible).HasColumnName("stock_disponible");
                 entity.Property(e => e.Estado).HasColumnName("estado");
-                entity.Property(e => e.NombreProducto).HasColumnName("nombre_producto");
+                
                 entity.Property(e => e.ProveedorId).HasColumnName("id_proveedor");
                 entity.Property(e => e.ProductoId).HasColumnName("id_producto");
 

@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CatalogoProveedorService } from '../../service/catalogo-proveedor.service';
 import { CatalogoProveedor } from '../../../../interfaces/catalogo-proveedor.interface';
+import { ProductService } from '../../../inventario/articulo/service/product.service';
+import { Product } from '../../../../interfaces/poduct.interface';
 
 @Component({
   selector: 'app-proveedor-list',
@@ -19,17 +21,23 @@ export class ProveedorListComponent implements OnInit {
   proveedorExpandido: number | null = null;
   catalogoActual: CatalogoProveedor[] = [];
   cargandoCatalogo: boolean = false;
+  articulos: Product[] = [];
   constructor(
     private proveedorService: ProveedorService,
     private cdr: ChangeDetectorRef,
     private catalogoService: CatalogoProveedorService,
-    
+    private productService: ProductService,
+
     
   ) {}
 
   ngOnInit(): void {
-    this.loadProveedores();
-  }
+  this.loadProveedores();
+  this.productService.getProductAll().subscribe(data => {
+    this.articulos = data;
+    this.cdr.markForCheck();
+  });
+}
 
   loadProveedores(): void {
     this.proveedorService.getProveedorAll().subscribe({
@@ -71,4 +79,8 @@ export class ProveedorListComponent implements OnInit {
       this.cdr.markForCheck();
     });
   }
+  getNombreArticulo(productoId: number | undefined): string {
+  if (!productoId) return '—';
+  return this.articulos.find(a => a.id === productoId)?.nombre || '—';
+}
 }

@@ -51,7 +51,7 @@ namespace MSVenta.Compras.Services
 
             existing.PrecioUnitario = item.PrecioUnitario;
             existing.StockDisponible = item.StockDisponible;
-            existing.NombreProducto = item.NombreProducto;
+            
             existing.Estado = item.Estado;
 
             await _context.SaveChangesAsync();

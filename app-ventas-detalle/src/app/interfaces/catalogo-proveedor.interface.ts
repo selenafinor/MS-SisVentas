@@ -5,7 +5,7 @@ export interface CatalogoProveedor {
   precioUnitario?: number;
   stockDisponible?: number;
   estado?: string;
-  nombreProducto?: string;
+  
   proveedorId?: number;
   proveedor?: Proveedor;
   productoId?: number;

@@ -91,7 +91,7 @@
                 <tbody>
                   <tr *ngFor="let item of catalogoActual"
                       class="border-t border-gray-800 text-gray-300">
-                    <td class="py-2 px-2">{{ item.nombreProducto }}</td>
+                    <td class="py-2 px-2">{{ getNombreArticulo(item.productoId)}}</td>
                     <td class="py-2 px-2 text-green-400">Bs. {{ item.precioUnitario | number:'1.2-2' }}</td>
                     <td class="py-2 px-2">{{ item.stockDisponible }}</td>
                     <td class="py-2 px-2">

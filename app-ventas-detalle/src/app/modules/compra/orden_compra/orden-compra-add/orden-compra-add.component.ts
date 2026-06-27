@@ -7,7 +7,8 @@ import { CatalogoProveedorService } from '../../service/catalogo-proveedor.servi
 import { ProductService } from '../../../inventario/articulo/service/product.service';
 import { DetalleOrdenCompra } from '../../../../interfaces/detalle-orden-compra.interface';
 import { CatalogoProveedor } from '../../../../interfaces/catalogo-proveedor.interface';
-import { Articulo } from '../../../../interfaces/articulo.interface';
+import { Product } from '../../../../interfaces/poduct.interface';
+
 
 @Component({
   selector: 'app-orden-compra-add',
@@ -20,10 +21,9 @@ export class OrdenCompraAddComponent implements OnInit {
 
   // Búsqueda de artículo
   busquedaArticulo: string = '';
-  articulosFiltrados: Articulo[] = [];
-  todosArticulos: Articulo[] = [];
-  articuloSeleccionado: Articulo | null = null;
-
+  articulosFiltrados: Product[] = [];
+  todosArticulos: Product[] = [];
+  articuloSeleccionado: Product | null = null;
   // Proveedores disponibles para el artículo seleccionado
   proveedoresDisponibles: CatalogoProveedor[] = [];
   cargandoProveedores = false;
@@ -63,7 +63,7 @@ export class OrdenCompraAddComponent implements OnInit {
     this.cdr.markForCheck();
   }
 
-  seleccionarArticulo(articulo: Articulo): void {
+  seleccionarArticulo(articulo: Product): void {
     this.articuloSeleccionado = articulo;
     this.busquedaArticulo = articulo.nombre || '';
     this.articulosFiltrados = [];
@@ -96,12 +96,12 @@ export class OrdenCompraAddComponent implements OnInit {
     }
 
     const item: DetalleOrdenCompra = {
-      productoId:     catalogo.productoId,
-      nombreProducto: catalogo.nombreProducto,
-      cantidad:       1,
-      precioUni:      catalogo.precioUnitario,
-      subTotal:       catalogo.precioUnitario
-    };
+  productoId:     catalogo.productoId,
+  nombreProducto: this.todosArticulos.find(a => a.id === catalogo.productoId)?.nombre || '',
+  cantidad:       1,
+  precioUni:      catalogo.precioUnitario,
+  subTotal:       catalogo.precioUnitario
+};
     this.carrito.update(c => [...c, item]);
     this.calcularTotal();
     this.cambiarArticulo();

@@ -3,15 +3,17 @@ using System;
 using MSVenta.Compras.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MSVenta.Compras.Migrations
 {
     [DbContext(typeof(ContextDatabase))]
-    partial class ContextDatabaseModelSnapshot : ModelSnapshot
+    [Migration("20260627220459_RemoveNombreProducto")]
+    partial class RemoveNombreProducto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

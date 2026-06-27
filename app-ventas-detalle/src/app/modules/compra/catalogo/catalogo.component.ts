@@ -7,7 +7,9 @@ import { ProveedorService } from '../service/proveedor.service';
 import { ProductService } from '../../inventario/articulo/service/product.service';
 import { CatalogoProveedor } from '../../../interfaces/catalogo-proveedor.interface';
 import { Proveedor } from '../../../interfaces/proveedor.interface';
-import { Articulo } from '../../../interfaces/articulo.interface';
+import { Product } from '../../../interfaces/poduct.interface';
+import { forkJoin } from 'rxjs';
+
 
 type Modo = 'lista' | 'nuevo' | 'editar';
 
@@ -26,7 +28,7 @@ export class CatalogoComponent implements OnInit {
   catalogo: CatalogoProveedor[] = [];
   catalogoFiltrado: CatalogoProveedor[] = [];
   proveedores: Proveedor[] = [];
-  articulos: Articulo[] = [];
+  articulos: Product[] = [];
 
   // Filtros
   filtroProveedorId: string = '';
@@ -36,7 +38,6 @@ export class CatalogoComponent implements OnInit {
   formNuevo = {
     proveedorId: '',
     productoId: '',
-    nombreProducto: '',
     precioUnitario: '',
     stockDisponible: ''
   };
@@ -64,42 +65,42 @@ export class CatalogoComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    this.catalogoService.getAll().subscribe(data => {
-      this.catalogo = data;
-      this.aplicarFiltros();
-      this.cdr.markForCheck();
-    });
-    this.proveedorService.getProveedorAll().subscribe(data => {
-      this.proveedores = data.filter(p => p.estado === 'activo');
-      this.cdr.markForCheck();
-    });
-    this.productService.getProductAll().subscribe(data => {
-      this.articulos = data;
-      this.cdr.markForCheck();
-    });
-  }
+  forkJoin({
+    catalogo: this.catalogoService.getAll(),
+    proveedores: this.proveedorService.getProveedorAll(),
+    articulos: this.productService.getProductAll()
+  }).subscribe(({ catalogo, proveedores, articulos }) => {
+    this.catalogo = catalogo;
+    this.proveedores = proveedores.filter(p => p.estado === 'activo');
+    this.articulos = articulos;
+    this.aplicarFiltros();
+    this.cdr.markForCheck();
+  });
+}
 
   aplicarFiltros(): void {
-    this.catalogoFiltrado = this.catalogo.filter(c => {
-      const matchProveedor = this.filtroProveedorId
-        ? c.proveedorId === +this.filtroProveedorId : true;
-      const matchArticulo = this.filtroArticulo
-        ? c.nombreProducto?.toLowerCase().includes(this.filtroArticulo.toLowerCase()) : true;
-      return matchProveedor && matchArticulo;
-    });
-    this.cdr.markForCheck();
-  }
+  this.catalogoFiltrado = this.catalogo.filter(c => {
+    const matchProveedor = this.filtroProveedorId
+      ? c.proveedorId === +this.filtroProveedorId : true;
+    const matchArticulo = this.filtroArticulo
+      ? this.getNombreArticulo(c.productoId)
+          .toLowerCase()
+          .includes(this.filtroArticulo.toLowerCase()) 
+      : true;
+    return matchProveedor && matchArticulo;
+  });
+  this.cdr.markForCheck();
+}
 
   onProductoSeleccionado(): void {
     const articulo = this.articulos.find(a => a.id === +this.formNuevo.productoId);
-    this.formNuevo.nombreProducto = articulo?.nombre || '';
     this.cdr.markForCheck();
   }
 
   irANuevo(): void {
     this.modo = 'nuevo';
     this.mensaje = '';
-    this.formNuevo = { proveedorId: '', productoId: '', nombreProducto: '', precioUnitario: '', stockDisponible: '' };
+    this.formNuevo = { proveedorId: '', productoId: '', precioUnitario: '', stockDisponible: '' };
     this.cdr.markForCheck();
   }
 
@@ -121,7 +122,6 @@ export class CatalogoComponent implements OnInit {
     const item: CatalogoProveedor = {
       proveedorId:     +this.formNuevo.proveedorId,
       productoId:      +this.formNuevo.productoId,
-      nombreProducto:  this.formNuevo.nombreProducto,
       precioUnitario:  +this.formNuevo.precioUnitario,
       stockDisponible: +this.formNuevo.stockDisponible,
       estado:          'activo'
@@ -195,4 +195,24 @@ export class CatalogoComponent implements OnInit {
   getNombreProveedor(proveedorId: number): string {
     return this.proveedores.find(p => p.id === proveedorId)?.nombre || '—';
   }
+ 
+  getImagenUrl(productoId: number | undefined): string {
+   if (!productoId) return '';
+   const articulo = this.articulos.find(a => a.id === productoId);
+  return articulo?.foto ? `http://localhost:5003${articulo.foto}` : '';
+  }
+  getNombreArticulo(productoId: number | undefined): string {
+  if (!productoId) return '—';
+  return this.articulos.find(a => a.id === productoId)?.nombre || '—';
+}
+
+onImageError(event: Event): void {
+  const img = event.target as HTMLImageElement;
+  img.style.display = 'none';
+  // muestra el emoji de caja como fallback
+  const parent = img.parentElement;
+  if (parent) {
+    parent.innerHTML = '<span style="font-size:2.5rem">📦</span>';
+  }
+}
 }
