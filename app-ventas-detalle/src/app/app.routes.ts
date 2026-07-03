@@ -102,6 +102,12 @@ export const routes: Routes = [
           import('./modules/inventario/traspaso/traspaso.route').then(m => m.traspaso_routes),
         data: { icon: 'pi pi-file-pdf', title: 'Traspaso', description: 'Gestion de Traspasos', permission: 'Traspaso' }
       },
+      {
+         path: 'reportes',
+        loadChildren: () =>
+          import('./modules/reportes/reportes.route').then(m => m.reportes_routes),
+         data: { icon: 'pi pi-chart-bar', title: 'Reportes', description: 'Reportes del sistema', permission: 'Reporte' }
+      },
     ],
   },
   {

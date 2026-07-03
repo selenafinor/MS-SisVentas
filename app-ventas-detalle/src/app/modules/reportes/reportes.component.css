@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.tab-activo {
+  border-bottom: 2px solid #dc2626;
+  color: #dc2626;
+}
+input[type="date"] {
+  color-scheme: dark;
+  background-color: #334155; /* slate-700 */
+  color: #ffffff;
+  border-radius: 0.25rem;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}

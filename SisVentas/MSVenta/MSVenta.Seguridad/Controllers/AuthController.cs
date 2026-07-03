@@ -57,6 +57,7 @@ namespace MSVenta.Seguridad.Controllers
                     userPermisos.UserId,
                     userPermisos.Fullname,
                     userPermisos.Username,
+                    userPermisos.Correo,
                     Roles = userPermisos.Roles.Select(role => new
                     {
                         role.ID_Rol,

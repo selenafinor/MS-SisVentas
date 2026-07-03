@@ -1,0 +1,409 @@
+<div class="p-6 bg-slate-900 min-h-screen">
+  <!-- Encabezado -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-white">Reportes</h1>
+      <p class="text-sm text-gray-400">Análisis y estadísticas del sistema</p>
+    </div>
+    <div class="flex gap-2">
+      <button
+        (click)="descargarPdf()"
+        [disabled]="cargando"
+        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 disabled:opacity-50">
+        📄 Descargar PDF
+      </button>
+      <button
+        (click)="abrirModalCorreo()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+        ✉️ Enviar por correo
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex gap-1 border-b border-slate-700 mb-6">
+    <button
+      (click)="cambiarTab('ventas')"
+      [class.text-red-500]="tabActivo === 'ventas'"
+      [class.border-red-500]="tabActivo === 'ventas'"
+      [class.text-gray-400]="tabActivo !== 'ventas'"
+      class="px-4 py-2 border-b-2 border-transparent font-medium">
+      Ventas
+    </button>
+    <button
+      (click)="cambiarTab('compras')"
+      [class.text-red-500]="tabActivo === 'compras'"
+      [class.border-red-500]="tabActivo === 'compras'"
+      [class.text-gray-400]="tabActivo !== 'compras'"
+      class="px-4 py-2 border-b-2 border-transparent font-medium">
+      Compras
+    </button>
+    <button
+      (click)="cambiarTab('inventario')"
+      [class.text-red-500]="tabActivo === 'inventario'"
+      [class.border-red-500]="tabActivo === 'inventario'"
+      [class.text-gray-400]="tabActivo !== 'inventario'"
+      class="px-4 py-2 border-b-2 border-transparent font-medium">
+      Inventario
+    </button>
+    <button
+      (click)="cambiarTab('movimientos')"
+      [class.text-red-500]="tabActivo === 'movimientos'"
+      [class.border-red-500]="tabActivo === 'movimientos'"
+      [class.text-gray-400]="tabActivo !== 'movimientos'"
+      class="px-4 py-2 border-b-2 border-transparent font-medium">
+      Movimientos
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="bg-slate-800 rounded-lg shadow p-4 mb-6 border border-slate-700">
+    <h3 class="text-sm font-semibold text-gray-300 mb-3">Filtros</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div>
+        <label class="text-xs text-gray-400 block mb-1">Desde</label>
+        <input type="date" [(ngModel)]="fechaDesde" class="border border-slate-600 rounded px-3 py-2 w-full text-sm" />
+      </div>
+      <div>
+        <label class="text-xs text-gray-400 block mb-1">Hasta</label>
+        <input type="date" [(ngModel)]="fechaHasta" class="border border-slate-600 rounded px-3 py-2 w-full text-sm" />
+      </div>
+      <div *ngIf="tabActivo === 'ventas' || tabActivo === 'compras'">
+        <label class="text-xs text-gray-400 block mb-1">Estado</label>
+        <select [(ngModel)]="filtroEstado" class="bg-slate-700 text-white border border-slate-600 rounded px-3 py-2 w-full text-sm">
+          <option value="todos">Todos</option>
+          <option value="activo">Activo</option>
+          <option value="pagado">Pagado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      <div *ngIf="tabActivo === 'ventas'">
+        <label class="text-xs text-gray-400 block mb-1">Tipo de pago</label>
+        <select [(ngModel)]="filtroTipoPago" class="bg-slate-700 text-white border border-slate-600 rounded px-3 py-2 w-full text-sm">
+          <option value="todos">Todos</option>
+          <option value="contado">Contado</option>
+          <option value="qr">QR</option>
+        </select>
+      </div>
+      <div class="flex items-end">
+        <button
+          (click)="aplicarFiltros()"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm w-full">
+          Aplicar filtros
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="cargando" class="text-center py-8 text-gray-400">
+    Cargando datos...
+  </div>
+
+  <!-- ═══════════════ TAB VENTAS ═══════════════ -->
+  <div *ngIf="!cargando && tabActivo === 'ventas'">
+    <div class="grid grid-cols-3 gap-4 mb-6">
+      <div class="bg-slate-800 rounded-lg shadow p-4 border border-slate-700 border-l-4 border-l-green-500">
+        <p class="text-xs text-gray-400">TOTAL VENDIDO</p>
+        <p class="text-2xl font-bold text-green-500">Bs. {{ totalVendido.toFixed(2) }}</p>
+      </div>
+      <div class="bg-slate-800 rounded-lg shadow p-4 border border-slate-700 border-l-4 border-l-red-500">
+        <p class="text-xs text-gray-400">VENTAS CANCELADAS</p>
+        <p class="text-2xl font-bold text-red-500">{{ ventasCanceladas }}</p>
+      </div>
+      <div class="bg-slate-800 rounded-lg shadow p-4 border border-slate-700 border-l-4 border-l-blue-500">
+        <p class="text-xs text-gray-400">TOP ARTÍCULO</p>
+        <p class="text-lg font-bold text-blue-400">{{ topArticulos[0]?.nombre || '—' }}</p>
+      </div>
+    </div>
+
+    <!-- Top 5 artículos -->
+    <div class="bg-slate-800 rounded-lg shadow mb-6 overflow-hidden border border-slate-700" *ngIf="topArticulos.length > 0">
+      <div class="px-4 py-3 border-b border-slate-700">
+        <h3 class="font-semibold text-gray-200">🏆 Top 5 artículos más vendidos</h3>
+      </div>
+      <table class="w-full text-sm">
+        <thead class="bg-slate-900 text-gray-400">
+          <tr>
+            <th class="px-4 py-2 text-left">#</th>
+            <th class="px-4 py-2 text-left">ARTÍCULO</th>
+            <th class="px-4 py-2 text-right">CANTIDAD</th>
+            <th class="px-4 py-2 text-right">TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of topArticulos; let i = index" class="border-t border-slate-700 text-gray-200">
+            <td class="px-4 py-2">#{{ i + 1 }}</td>
+            <td class="px-4 py-2 text-blue-400">{{ item.nombre }}</td>
+            <td class="px-4 py-2 text-right">{{ item.cantidad }}</td>
+            <td class="px-4 py-2 text-right text-green-500">Bs. {{ item.total.toFixed(2) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Detalle de ventas -->
+    <div class="bg-slate-800 rounded-lg shadow overflow-hidden border border-slate-700">
+      <div class="px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+        <h3 class="font-semibold text-gray-200">Detalle de ventas</h3>
+        <span class="text-xs text-gray-500">{{ ventas.length }} registros</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-900 text-white">
+            <tr>
+              <th class="px-4 py-2 text-left">CÓDIGO</th>
+              <th class="px-4 py-2 text-left">FECHA</th>
+              <th class="px-4 py-2 text-left">HORA</th>
+              <th class="px-4 py-2 text-left">CLIENTE</th>
+              <th class="px-4 py-2 text-left">ARTÍCULOS</th>
+              <th class="px-4 py-2 text-right">TOTAL</th>
+              <th class="px-4 py-2 text-left">PAGO</th>
+              <th class="px-4 py-2 text-left">ESTADO</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let v of ventas" class="border-t border-slate-700 text-gray-200 hover:bg-slate-700">
+              <td class="px-4 py-2 text-blue-400">VTA-{{ (v.id || 0).toString().padStart(5,'0') }}</td>
+              <td class="px-4 py-2">{{ v.fecha | date:'dd/MM/yyyy' }}</td>
+              <td class="px-4 py-2">{{ v.hora }}</td>
+              <td class="px-4 py-2">{{ getNombreCliente(v) }}</td>
+              <td class="px-4 py-2 text-xs">{{ getArticulosVenta(v) }}</td>
+              <td class="px-4 py-2 text-right">Bs. {{ v.montoTotal?.toFixed(2) }}</td>
+              <td class="px-4 py-2">{{ v.tipoPago }}</td>
+              <td class="px-4 py-2">
+                <span class="px-2 py-1 rounded-full text-xs"
+                  [class.bg-green-900]="v.estado === 'activo' || v.estado === 'pagado'"
+                  [class.text-green-300]="v.estado === 'activo' || v.estado === 'pagado'"
+                  [class.bg-red-900]="v.estado === 'cancelado'"
+                  [class.text-red-300]="v.estado === 'cancelado'">
+                  {{ v.estado }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB COMPRAS ═══════════════ -->
+  <div *ngIf="!cargando && tabActivo === 'compras'">
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="bg-slate-800 rounded-lg shadow p-4 border border-slate-700 border-l-4 border-l-green-500">
+        <p class="text-xs text-gray-400">TOTAL COMPRADO</p>
+        <p class="text-2xl font-bold text-green-500">Bs. {{ totalComprado.toFixed(2) }}</p>
+      </div>
+      <div class="bg-slate-800 rounded-lg shadow p-4 border border-slate-700 border-l-4 border-l-blue-500">
+        <p class="text-xs text-gray-400">TOTAL REGISTROS</p>
+        <p class="text-2xl font-bold text-blue-400">{{ compras.length }}</p>
+      </div>
+    </div>
+
+    <div class="bg-slate-800 rounded-lg shadow overflow-hidden border border-slate-700">
+      <div class="px-4 py-3 border-b border-slate-700">
+        <h3 class="font-semibold text-gray-200">Detalle de compras</h3>
+      </div>
+      <table class="w-full text-sm">
+        <thead class="bg-slate-900 text-white">
+          <tr>
+            <th class="px-4 py-2 text-left">FECHA</th>
+            <th class="px-4 py-2 text-left">PROVEEDOR</th>
+            <th class="px-4 py-2 text-right">TOTAL</th>
+            <th class="px-4 py-2 text-left">PAGO</th>
+            <th class="px-4 py-2 text-left">ESTADO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of compras" class="border-t border-slate-700 text-gray-200 hover:bg-slate-700">
+            <td class="px-4 py-2">{{ c.fechaCompra | date:'dd/MM/yyyy' }}</td>
+            <td class="px-4 py-2">{{ getNombreProveedor(c) }}</td>
+            <td class="px-4 py-2 text-right">Bs. {{ c.totalCompra?.toFixed(2) }}</td>
+            <td class="px-4 py-2">{{ c.tipoPago }}</td>
+            <td class="px-4 py-2">
+              <span class="px-2 py-1 rounded-full text-xs bg-green-900 text-green-300">
+                {{ c.estado }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB INVENTARIO ═══════════════ -->
+  <div *ngIf="!cargando && tabActivo === 'inventario'">
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="bg-slate-800 rounded-lg shadow p-4 border border-slate-700 border-l-4 border-l-blue-500">
+        <p class="text-xs text-gray-400">TOTAL ARTÍCULOS</p>
+        <p class="text-2xl font-bold text-blue-400">{{ totalArticulos }}</p>
+      </div>
+      <div class="bg-slate-800 rounded-lg shadow p-4 border border-slate-700 border-l-4 border-l-red-500">
+        <p class="text-xs text-gray-400">STOCK BAJO</p>
+        <p class="text-2xl font-bold text-red-500">{{ totalStockBajo }}</p>
+      </div>
+    </div>
+
+    <div class="bg-slate-800 rounded-lg shadow overflow-hidden border border-slate-700">
+      <div class="px-4 py-3 border-b border-slate-700">
+        <h3 class="font-semibold text-gray-200">Detalle de artículos</h3>
+      </div>
+      <table class="w-full text-sm">
+        <thead class="bg-slate-900 text-white">
+          <tr>
+            <th class="px-4 py-2 text-left">ARTÍCULO</th>
+            <th class="px-4 py-2 text-left">CATEGORÍA</th>
+            <th class="px-4 py-2 text-left">MARCA</th>
+            <th class="px-4 py-2 text-right">STOCK</th>
+            <th class="px-4 py-2 text-right">MÍN</th>
+            <th class="px-4 py-2 text-right">MÁX</th>
+            <th class="px-4 py-2 text-right">PRECIO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of articulos" class="border-t border-slate-700 text-gray-200 hover:bg-slate-700"
+            [class.bg-red-950]="esStockBajo(a)">
+            <td class="px-4 py-2">{{ a.nombre }}</td>
+            <td class="px-4 py-2">{{ a.nombreCategoria }}</td>
+            <td class="px-4 py-2">{{ a.nombreMarca }}</td>
+            <td class="px-4 py-2 text-right" [class.text-red-400]="esStockBajo(a)" [class.font-bold]="esStockBajo(a)">
+              {{ a.stock }}
+            </td>
+            <td class="px-4 py-2 text-right">{{ a.stockMin }}</td>
+            <td class="px-4 py-2 text-right">{{ a.stockMax }}</td>
+            <td class="px-4 py-2 text-right">Bs. {{ a.precio?.toFixed(2) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB MOVIMIENTOS ═══════════════ -->
+  <div *ngIf="!cargando && tabActivo === 'movimientos'">
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Ingresos -->
+      <div class="bg-slate-800 rounded-lg shadow overflow-hidden border border-slate-700">
+        <div class="px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+          <h3 class="font-semibold text-gray-200">📥 Ingresos</h3>
+          <span class="text-xs text-gray-500">{{ ingresos.length }} registros</span>
+        </div>
+        <table class="w-full text-sm">
+          <thead class="bg-slate-900 text-white">
+            <tr>
+              <th class="px-3 py-2 text-left">FECHA</th>
+              <th class="px-3 py-2 text-left">MOTIVO</th>
+              <th class="px-3 py-2 text-left">ARTÍCULOS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of ingresos" class="border-t border-slate-700 text-gray-200 hover:bg-slate-700">
+              <td class="px-3 py-2 align-top whitespace-nowrap">{{ i.fecha | date:'dd/MM/yyyy' }}</td>
+              <td class="px-3 py-2 align-top text-blue-400">{{ i.motivo }}</td>
+              <td class="px-3 py-2 text-xs">
+                <div *ngFor="let d of i.detalles">
+                  {{ d.articuloAlmacen?.articulo?.nombre }}
+                  <span class="text-blue-400">x{{ d.cantidad }}</span>
+                </div>
+                <span *ngIf="!i.detalles?.length" class="text-gray-500">—</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Egresos -->
+      <div class="bg-slate-800 rounded-lg shadow overflow-hidden border border-slate-700">
+        <div class="px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+          <h3 class="font-semibold text-gray-200">📤 Egresos</h3>
+          <span class="text-xs text-gray-500">{{ egresos.length }} registros</span>
+        </div>
+        <table class="w-full text-sm">
+          <thead class="bg-slate-900 text-white">
+            <tr>
+              <th class="px-3 py-2 text-left">FECHA</th>
+              <th class="px-3 py-2 text-left">MOTIVO</th>
+              <th class="px-3 py-2 text-left">ARTÍCULOS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let e of egresos" class="border-t border-slate-700 text-gray-200 hover:bg-slate-700">
+              <td class="px-3 py-2 align-top whitespace-nowrap">{{ e.fecha | date:'dd/MM/yyyy' }}</td>
+              <td class="px-3 py-2 align-top text-red-400">{{ e.motivo }}</td>
+              <td class="px-3 py-2 text-xs">
+                <div *ngFor="let d of e.detalles">
+                  {{ d.articuloAlmacen?.articulo?.nombre }}
+                  <span class="text-red-400">x{{ d.cantidad }}</span>
+                </div>
+                <span *ngIf="!e.detalles?.length" class="text-gray-500">—</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- ═══════════════ MODAL ENVIAR CORREO ═══════════════ -->
+  <div *ngIf="modalCorreoAbierto" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-slate-800 rounded-lg shadow-xl p-6 w-[420px] border border-slate-700">
+      <h3 class="text-lg font-bold mb-4 text-white">Enviar reporte por correo</h3>
+      <p class="text-sm text-gray-400 mb-4">
+        Se enviará el reporte de <strong>{{ tabActivo }}</strong> a los destinatarios indicados.
+      </p>
+
+      <!-- Lista de destinatarios ya agregados -->
+      <div class="mb-4" *ngIf="destinatarios.length > 0">
+        <label class="text-xs text-gray-400 block mb-2">Destinatarios ({{ destinatarios.length }})</label>
+        <div class="space-y-2 max-h-32 overflow-y-auto">
+          <div *ngFor="let d of destinatarios; let i = index"
+            class="flex items-center justify-between bg-slate-700 rounded px-3 py-2 text-sm">
+            <div class="text-white">
+              {{ d.nombre }}
+              <span class="text-gray-400 text-xs block">{{ d.correo }}</span>
+            </div>
+            <button (click)="quitarDestinatario(i)"
+              class="text-red-400 hover:text-red-300 text-xs px-2">
+              ✕
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario para agregar un destinatario nuevo -->
+      <div class="mb-3">
+        <label class="text-xs text-gray-400 block mb-1">Nombre del destinatario</label>
+        <input type="text" [(ngModel)]="nombreDestinoTemp"
+          class="bg-slate-700 border border-slate-600 text-white rounded px-3 py-2 w-full text-sm"
+          placeholder="Ej: Juan Pérez" />
+      </div>
+
+      <div class="mb-3">
+        <label class="text-xs text-gray-400 block mb-1">Correo electrónico</label>
+        <div class="flex gap-2">
+          <input type="email" [(ngModel)]="correoDestinoTemp"
+            class="bg-slate-700 border border-slate-600 text-white rounded px-3 py-2 w-full text-sm"
+            placeholder="correo@ejemplo.com o admin@tecnoweb.net" />
+          <button (click)="agregarDestinatario()"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-3 rounded-lg text-sm whitespace-nowrap">
+            + Agregar
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">
+          Puedes agregar correos internos (&#64;tecnoweb.net) o externos (Gmail, etc.)
+        </p>
+      </div>
+
+      <div class="flex gap-2 justify-end mt-4">
+        <button (click)="cerrarModalCorreo()"
+          class="px-4 py-2 rounded-lg border border-slate-600 text-gray-300 hover:bg-slate-700">
+          Cancelar
+        </button>
+        <button (click)="enviarCorreo()" [disabled]="enviandoCorreo"
+          class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white disabled:opacity-50">
+          {{ enviandoCorreo ? 'Enviando...' : 'Enviar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -16,7 +16,7 @@ namespace MSVenta.Seguridad.Services
         {
             _context = context;
         }
-        
+
 
         public async Task<IEnumerable<UsuarioDTO>> GetAllUsuarios()
         {
@@ -34,8 +34,8 @@ namespace MSVenta.Seguridad.Services
                 UserId = u.UserId,
                 Fullname = u.Fullname,
                 Username = u.Username,
-                Correo = u.Correo,        
-                Telefono = u.Telefono,    
+                Correo = u.Correo,
+                Telefono = u.Telefono,
                 Estado = u.Estado,
                 Roles = u.RolPermisoUsuarios
                     .GroupBy(rpu => new { rpu.RolPermiso.Rol.ID_Rol, rpu.RolPermiso.Rol.Nombre_Rol })
@@ -91,8 +91,8 @@ namespace MSVenta.Seguridad.Services
                 UserId = usuario.UserId,
                 Fullname = usuario.Fullname,
                 Username = usuario.Username,
-                Correo = usuario.Correo,        
-                Telefono = usuario.Telefono,    
+                Correo = usuario.Correo,
+                Telefono = usuario.Telefono,
                 Estado = usuario.Estado,
                 Roles = roles
             };
@@ -109,6 +109,21 @@ namespace MSVenta.Seguridad.Services
 
         public async Task UpdateUsuario(Usuario usuario)
         {
+            // Trae el usuario actual de la base para no perder campos que el
+            // formulario de edición no envía (como la contraseña).
+            var usuarioExistente = await _context.Usuarios
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.UserId == usuario.UserId);
+
+            if (usuarioExistente == null)
+                return;
+
+            // Si no llega password nueva, conserva la que ya existía.
+            if (string.IsNullOrWhiteSpace(usuario.Password))
+            {
+                usuario.Password = usuarioExistente.Password;
+            }
+
             _context.Entry(usuario).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

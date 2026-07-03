@@ -42,11 +42,15 @@ export class DashboardLayoutComponent implements OnInit {
     { path: '/dashboard/compra/adquisicion', title: 'Adquisiciones', permission: 'gestionar_compras' },
     { path: '/dashboard/compra/nota-compra', title: 'Notas Compra', permission: 'gestionar_compras' },
   
+    ];
+  reportesRoutes = [
+  { path: '/dashboard/reportes', title: 'Reportes', icon: 'pi pi-chart-bar', permission: 'gestionar_reportes' }
 ];
 
   inventarioOpen = false;
   ventasOpen = false;
   comprasOpen = false;
+  reportesOpen = false;
 
   constructor(private router: Router, private cdr: ChangeDetectorRef) {}
 
