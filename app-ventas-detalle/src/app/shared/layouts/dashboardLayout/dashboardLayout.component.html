@@ -5,7 +5,14 @@
       AppVenta<span class="text-indigo-500">.</span>
     </h1>
     <div class="border-gray-700 border my-5"></div>
-
+   <!-- Inicio -->
+    <div class="mb-4">
+      <a [routerLink]="'/dashboard/inicio'" routerLinkActive="bg-gray-600"
+        class="flex items-center hover:bg-gray-600 rounded-md p-2 transition-colors">
+        <i class="pi pi-home text-lg mr-3 text-indigo-400"></i>
+        <span class="text-white font-semibold">Inicio</span>
+      </a>
+    </div>
     <!-- GENERAL -->
     <p class="text-xs text-gray-400 uppercase mb-2 px-2">General</p>
     <div class="flex flex-col space-y-1 mb-4">
@@ -102,13 +109,16 @@
         </div>
       }
       <!-- Reportes -->
-      <div>
-        <a [routerLink]="'/dashboard/reportes'" routerLinkActive="bg-gray-600"
-          class="flex items-center hover:bg-gray-600 rounded-md p-2 transition-colors">
-          <i class="pi pi-chart-bar text-lg mr-3 text-indigo-400"></i>
-          <span class="text-white font-semibold">Reportes</span>
-        </a>
-      </div>
+      <!-- Reportes -->
+      @if (hasPermission('ver_reportes')) {
+        <div>
+          <a [routerLink]="'/dashboard/reportes'" routerLinkActive="bg-gray-600"
+            class="flex items-center hover:bg-gray-600 rounded-md p-2 transition-colors">
+            <i class="pi pi-chart-bar text-lg mr-3 text-indigo-400"></i>
+            <span class="text-white font-semibold">Reportes</span>
+          </a>
+        </div>
+      }
     </div>
   </nav>
 

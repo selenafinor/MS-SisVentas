@@ -1,13 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
   ReporteVentasResponse,
   ReporteComprasResponse,
   ReporteInventarioResponse,
   ReporteMovimientosResponse,
-  EnviarCorreoRequest
+  EnviarCorreoRequest,
+  DashboardResponse
 } from '../../../interfaces/reporte.interface';
+
+const httpOptions = (token: string) => ({
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  }),
+});
+
+const httpOptionsBlob = (token: string) => ({
+  headers: new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+  }),
+  responseType: 'blob' as 'json'
+});
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +32,14 @@ export class ReporteService {
 
   constructor(private http: HttpClient) {}
 
+  private getToken(): string {
+    return sessionStorage.getItem('token') || '';
+  }
+
+  getDashboard(): Observable<DashboardResponse> {
+    return this.http.get<DashboardResponse>(`${this.baseUrl}/dashboard`, httpOptions(this.getToken()));
+  }
+
   getReporteVentas(filtros: {
     desde?: string;
     hasta?: string;
@@ -24,7 +47,10 @@ export class ReporteService {
     tipoPago?: string;
   }): Observable<ReporteVentasResponse> {
     let params = this.construirParams(filtros);
-    return this.http.get<ReporteVentasResponse>(`${this.baseUrl}/ventas`, { params });
+    return this.http.get<ReporteVentasResponse>(`${this.baseUrl}/ventas`, {
+      ...httpOptions(this.getToken()),
+      params
+    });
   }
 
   getReporteCompras(filtros: {
@@ -33,11 +59,14 @@ export class ReporteService {
     estado?: string;
   }): Observable<ReporteComprasResponse> {
     let params = this.construirParams(filtros);
-    return this.http.get<ReporteComprasResponse>(`${this.baseUrl}/compras`, { params });
+    return this.http.get<ReporteComprasResponse>(`${this.baseUrl}/compras`, {
+      ...httpOptions(this.getToken()),
+      params
+    });
   }
 
   getReporteInventario(): Observable<ReporteInventarioResponse> {
-    return this.http.get<ReporteInventarioResponse>(`${this.baseUrl}/inventario`);
+    return this.http.get<ReporteInventarioResponse>(`${this.baseUrl}/inventario`, httpOptions(this.getToken()));
   }
 
   getReporteMovimientos(filtros: {
@@ -46,7 +75,10 @@ export class ReporteService {
     tipo?: string;
   }): Observable<ReporteMovimientosResponse> {
     let params = this.construirParams(filtros);
-    return this.http.get<ReporteMovimientosResponse>(`${this.baseUrl}/movimientos`, { params });
+    return this.http.get<ReporteMovimientosResponse>(`${this.baseUrl}/movimientos`, {
+      ...httpOptions(this.getToken()),
+      params
+    });
   }
 
   descargarPdfVentas(filtros: {
@@ -56,7 +88,10 @@ export class ReporteService {
     tipoPago?: string;
   }): Observable<Blob> {
     let params = this.construirParams(filtros);
-    return this.http.get(`${this.baseUrl}/ventas/pdf`, { params, responseType: 'blob' });
+    return this.http.get(`${this.baseUrl}/ventas/pdf`, {
+      ...httpOptionsBlob(this.getToken()),
+      params
+    }) as unknown as Observable<Blob>;
   }
 
   descargarPdfCompras(filtros: {
@@ -65,11 +100,14 @@ export class ReporteService {
     estado?: string;
   }): Observable<Blob> {
     let params = this.construirParams(filtros);
-    return this.http.get(`${this.baseUrl}/compras/pdf`, { params, responseType: 'blob' });
+    return this.http.get(`${this.baseUrl}/compras/pdf`, {
+      ...httpOptionsBlob(this.getToken()),
+      params
+    }) as unknown as Observable<Blob>;
   }
 
   descargarPdfInventario(): Observable<Blob> {
-    return this.http.get(`${this.baseUrl}/inventario/pdf`, { responseType: 'blob' });
+    return this.http.get(`${this.baseUrl}/inventario/pdf`, httpOptionsBlob(this.getToken())) as unknown as Observable<Blob>;
   }
 
   descargarPdfMovimientos(filtros: {
@@ -77,11 +115,14 @@ export class ReporteService {
     hasta?: string;
   }): Observable<Blob> {
     let params = this.construirParams(filtros);
-    return this.http.get(`${this.baseUrl}/movimientos/pdf`, { params, responseType: 'blob' });
+    return this.http.get(`${this.baseUrl}/movimientos/pdf`, {
+      ...httpOptionsBlob(this.getToken()),
+      params
+    }) as unknown as Observable<Blob>;
   }
 
   enviarPorCorreo(request: EnviarCorreoRequest): Observable<{ mensaje: string }> {
-    return this.http.post<{ mensaje: string }>(`${this.baseUrl}/enviar-correo`, request);
+    return this.http.post<{ mensaje: string }>(`${this.baseUrl}/enviar-correo`, request, httpOptions(this.getToken()));
   }
 
   private construirParams(filtros: { [key: string]: string | undefined }): any {

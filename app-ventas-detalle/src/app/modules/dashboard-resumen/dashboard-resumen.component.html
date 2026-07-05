@@ -1,0 +1,151 @@
+<div class="p-6 bg-slate-900 min-h-screen text-slate-100">
+
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold">Inicio</h1>
+    <button
+      (click)="cargarDashboard()"
+      class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm transition">
+      Actualizar
+    </button>
+  </div>
+
+  <!-- Estado de carga -->
+  <div *ngIf="cargando" class="text-slate-400 text-center py-10">
+    Cargando resumen...
+  </div>
+
+  <!-- Estado de error -->
+  <div *ngIf="error && !cargando" class="bg-red-900/40 border border-red-700 text-red-200 rounded-lg p-4 mb-6">
+    No se pudo cargar el dashboard. Verifica que los microservicios estén activos.
+  </div>
+
+  <!-- Contenido -->
+  <div *ngIf="dashboard && !cargando">
+
+    <!-- Tarjetas de resumen -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+
+      @if (hasPermission('gestionar_ventas')) {
+        <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
+          <p class="text-slate-400 text-sm mb-1">Ventas hoy</p>
+          <p class="text-2xl font-bold">Bs {{ dashboard.ventasHoyMonto | number:'1.2-2' }}</p>
+          <p class="text-slate-500 text-xs mt-1">{{ dashboard.ventasHoyCantidad }} venta(s)</p>
+        </div>
+      }
+
+      @if (hasPermission('gestionar_inventario')) {
+        <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
+          <p class="text-slate-400 text-sm mb-1">Artículos en stock</p>
+          <p class="text-2xl font-bold">{{ dashboard.totalUnidadesEnStock }}</p>
+          <p class="text-slate-500 text-xs mt-1">{{ dashboard.totalArticulos }} artículo(s) registrados</p>
+        </div>
+      }
+
+      @if (hasPermission('gestionar_compras')) {
+        <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
+          <p class="text-slate-400 text-sm mb-1">Órdenes pendientes</p>
+          <p class="text-2xl font-bold">{{ dashboard.ordenesPendientes }}</p>
+        </div>
+      }
+
+      @if (hasPermission('gestionar_inventario')) {
+        <div class="bg-slate-800 rounded-xl p-5 border"
+             [ngClass]="dashboard.totalStockBajo > 0 ? 'border-amber-600' : 'border-slate-700'">
+          <p class="text-slate-400 text-sm mb-1">Alertas de stock bajo</p>
+          <p class="text-2xl font-bold" [ngClass]="dashboard.totalStockBajo > 0 ? 'text-amber-400' : ''">
+            {{ dashboard.totalStockBajo }}
+          </p>
+        </div>
+      }
+
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- Últimas ventas -->
+      @if (hasPermission('gestionar_ventas')) {
+        <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+          <div class="px-5 py-3 border-b border-slate-700">
+            <h2 class="font-semibold">Últimas ventas</h2>
+          </div>
+          <table class="w-full text-sm">
+            <thead class="bg-slate-700/50 text-slate-400">
+              <tr>
+                <th class="text-left px-4 py-2">Fecha</th>
+                <th class="text-left px-4 py-2">Cliente</th>
+                <th class="text-right px-4 py-2">Monto</th>
+                <th class="text-left px-4 py-2">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let v of dashboard.ultimasVentas" class="border-t border-slate-700">
+                <td class="px-4 py-2">{{ v.fecha | date:'dd/MM/yyyy' }}</td>
+                <td class="px-4 py-2">{{ getNombreCliente(v.cliente) }}</td>
+                <td class="px-4 py-2 text-right">Bs {{ v.montoTotal | number:'1.2-2' }}</td>
+                <td class="px-4 py-2 capitalize">{{ v.estado }}</td>
+              </tr>
+              <tr *ngIf="dashboard.ultimasVentas.length === 0">
+                <td colspan="4" class="px-4 py-4 text-center text-slate-500">Sin ventas registradas</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <!-- Alertas de stock bajo -->
+      @if (hasPermission('gestionar_inventario')) {
+        <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+          <div class="px-5 py-3 border-b border-slate-700">
+            <h2 class="font-semibold">Alertas de stock bajo</h2>
+          </div>
+          <table class="w-full text-sm">
+            <thead class="bg-slate-700/50 text-slate-400">
+              <tr>
+                <th class="text-left px-4 py-2">Artículo</th>
+                <th class="text-right px-4 py-2">Stock</th>
+                <th class="text-right px-4 py-2">Mínimo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of dashboard.alertasStockBajo" class="border-t border-slate-700">
+                <td class="px-4 py-2">{{ a.nombre }}</td>
+                <td class="px-4 py-2 text-right text-amber-400 font-semibold">{{ a.stock }}</td>
+                <td class="px-4 py-2 text-right">{{ a.stockMin }}</td>
+              </tr>
+              <tr *ngIf="dashboard.alertasStockBajo.length === 0">
+                <td colspan="3" class="px-4 py-4 text-center text-slate-500">Sin alertas de stock</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      }
+
+    </div>
+
+    <!-- Accesos rápidos -->
+    <div class="mt-8">
+      <h2 class="font-semibold mb-3">Accesos rápidos</h2>
+      <div class="flex flex-wrap gap-3">
+        @if (hasPermission('gestionar_ventas')) {
+          <a routerLink="/dashboard/sale" class="px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg text-sm transition">Nueva venta</a>
+        }
+        @if (hasPermission('gestionar_compras')) {
+          <a routerLink="/dashboard/compra" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-600 rounded-lg text-sm transition">Nueva compra</a>
+        }
+        @if (hasPermission('gestionar_inventario')) {
+          <a routerLink="/dashboard/articulo" class="px-4 py-2 bg-amber-700 hover:bg-amber-600 rounded-lg text-sm transition">Ver artículos</a>
+        }
+        @if (hasPermission('ver_reportes')) {
+          <a routerLink="/dashboard/reportes" class="px-4 py-2 bg-purple-700 hover:bg-purple-600 rounded-lg text-sm transition">Ver reportes</a>
+        }
+        @if (hasPermission('gestionar_ventas')) {
+          <a routerLink="/dashboard/customer" class="px-4 py-2 bg-rose-700 hover:bg-rose-600 rounded-lg text-sm transition">Clientes</a>
+        }
+        @if (hasPermission('gestionar_usuarios')) {
+          <a routerLink="/dashboard/user" class="px-4 py-2 bg-cyan-700 hover:bg-cyan-600 rounded-lg text-sm transition">Usuarios</a>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

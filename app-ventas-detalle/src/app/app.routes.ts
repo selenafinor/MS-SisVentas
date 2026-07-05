@@ -11,7 +11,13 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardLayoutComponent,
     children: [
-      {
+       {
+        path: 'inicio',
+        loadChildren: () =>
+          import('./modules/dashboard-resumen/dashboard-resumen.route').then(m => m.dashboard_resumen_routes),
+        data: { icon: 'pi pi-home', title: 'Inicio', description: 'Resumen general del sistema', permission: 'Dashboard' }
+      },
+      { 
         path: 'roles',
         loadChildren: () =>
           import('./modules/rol/rol.route').then(m => m.rol_routes),
@@ -102,11 +108,11 @@ export const routes: Routes = [
           import('./modules/inventario/traspaso/traspaso.route').then(m => m.traspaso_routes),
         data: { icon: 'pi pi-file-pdf', title: 'Traspaso', description: 'Gestion de Traspasos', permission: 'Traspaso' }
       },
-      {
-         path: 'reportes',
+   {
+        path: 'inicio',
         loadChildren: () =>
-          import('./modules/reportes/reportes.route').then(m => m.reportes_routes),
-         data: { icon: 'pi pi-chart-bar', title: 'Reportes', description: 'Reportes del sistema', permission: 'Reporte' }
+          import('./modules/dashboard-resumen/dashboard-resumen.route').then(m => m.dashboard_resumen_routes),
+        data: { icon: 'pi pi-home', title: 'Inicio', description: 'Resumen general del sistema' }
       },
     ],
   },

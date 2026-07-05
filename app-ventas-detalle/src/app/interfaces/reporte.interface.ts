@@ -136,3 +136,23 @@ export interface EnviarCorreoRequest {
   remitenteNombre?: string;
   remitenteEmail?: string;
 }
+export interface OrdenCompraDashboard {
+  id: number;
+  fecha: string;
+  total: number;
+  estado: string;
+  glosa: string;
+  proveedorId?: number;
+  proveedor?: { id: number; nombre: string };
+}
+
+export interface DashboardResponse {
+  ventasHoyMonto: number;
+  ventasHoyCantidad: number;
+  totalArticulos: number;
+  totalUnidadesEnStock: number;
+  totalStockBajo: number;
+  alertasStockBajo: ArticuloReporte[];
+  ordenesPendientes: number;
+  ultimasVentas: NotaVenta[];
+}

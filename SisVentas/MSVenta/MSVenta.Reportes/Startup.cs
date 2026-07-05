@@ -39,12 +39,13 @@ namespace MSVenta.Reportes
                     Configuration["MicroserviciosUrl:Inventario"]);
             });
 
-            // Servicio de correo
+            
             services.AddScoped<CorreoService>();
             services.AddScoped<VentaService>();
             services.AddScoped<CompraService>();
             services.AddScoped<InventarioService>();
             services.AddScoped<PdfService>();
+            services.AddScoped<DashboardService>();
 
             // CORS para Angular
             services.AddCors(options =>

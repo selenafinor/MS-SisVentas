@@ -18,19 +18,38 @@ namespace MSVenta.Reportes.Controllers
         private readonly InventarioService _inventarioService;
         private readonly CorreoService _correoService;
         private readonly PdfService _pdfService;
+        private readonly DashboardService _dashboardService;
 
         public ReporteController(
             VentaService ventaService,
             CompraService compraService,
             InventarioService inventarioService,
             CorreoService correoService,
-            PdfService pdfService)
+            PdfService pdfService,
+            DashboardService dashboardService)
         {
             _ventaService = ventaService;
             _compraService = compraService;
             _inventarioService = inventarioService;
             _correoService = correoService;
             _pdfService = pdfService;
+            _dashboardService = dashboardService;
+        }
+
+        // ─── DASHBOARD ────────────────────────────────────────
+
+        [HttpGet("dashboard")]
+        public async Task<IActionResult> GetDashboard()
+        {
+            try
+            {
+                var dashboard = await _dashboardService.GetDashboardAsync();
+                return Ok(dashboard);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = ex.Message });
+            }
         }
 
         // ─── VENTAS ───────────────────────────────────────────
