@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 namespace MSVenta.Seguridad.Models
 {
@@ -12,6 +13,8 @@ namespace MSVenta.Seguridad.Models
         public string Correo { get; set; }
         public string Telefono { get; set; }
         public string Estado { get; set; } = "activo";
+        public int IntentosFallidos { get; set; } = 0;
+        public DateTime? BloqueadoHasta { get; set; }
         public ICollection<RolPermisoUsuario> RolPermisoUsuarios { get; set; }
     }
 }

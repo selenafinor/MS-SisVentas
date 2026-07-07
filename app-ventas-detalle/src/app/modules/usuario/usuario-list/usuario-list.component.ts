@@ -70,4 +70,29 @@ cambiarEstado(user: User): void {
     }
   });
 }
+desbloquearUsuario(user: User): void {
+  Swal.fire({
+    title: '¿Desbloquear este usuario?',
+    text: 'El usuario podrá intentar iniciar sesión de nuevo inmediatamente.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, desbloquear',
+    cancelButtonText: 'Cancelar',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.usuarioService.desbloquearUsuario(user.userId!).subscribe({
+        next: () => {
+          Swal.fire('¡Listo!', 'Usuario desbloqueado correctamente.', 'success');
+          this.reloadUsers();
+        },
+        error: (err) => console.error(err),
+      });
+    }
+  });
+}
+
+estaBloqueado(user: User): boolean {
+  if (!user.bloqueadoHasta) return false;
+  return new Date(user.bloqueadoHasta) > new Date();
+}
 }

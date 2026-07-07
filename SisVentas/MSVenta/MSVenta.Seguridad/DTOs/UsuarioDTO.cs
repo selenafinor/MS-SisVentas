@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 namespace MSVenta.Seguridad.DTOs
 {
     public class UsuarioDTO
@@ -9,6 +10,7 @@ namespace MSVenta.Seguridad.DTOs
         public string Correo { get; set; }
         public string Telefono { get; set; }
         public string Estado { get; set; }
+        public DateTime? BloqueadoHasta { get; set; }
         public List<RolDTO> Roles { get; set; }
     }
 }

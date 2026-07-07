@@ -5,3 +5,6 @@
 *.user
 *.suo
 SisVentas/docker/electronicaSQL.zip
+docker/mailserver/mail-data/
+docker/mailserver/mail-state/
+docker/mailserver/mail-logs/

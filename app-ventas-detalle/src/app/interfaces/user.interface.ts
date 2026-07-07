@@ -10,4 +10,6 @@ export interface User {
   estado?: string;
   roles?: Rol[];
   token?: string;
+  bloqueadoHasta?: string | null;
+
 }

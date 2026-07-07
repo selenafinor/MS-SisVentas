@@ -165,24 +165,26 @@ services:
       - ms-venta
       - ms-compras
       - ms-inventario
+      - mailserver
     environment:
       MicroserviciosUrl__Ventas: "http://ms-venta:80"
       MicroserviciosUrl__Compras: "http://ms-compras:80"
       MicroserviciosUrl__Inventario: "http://ms-inventario:80"
-      Correo__Host: "192.168.1.11"
+      Correo__Host: "mailserver"
       Correo__Puerto: "25"
       Correo__UsarSsl: "false"
       Correo__RequiereAutenticacion: "false"
       Correo__RemitenteName: "Sistema de Ventas"
       Correo__RemitenteEmail: "sistema@tecnoweb.net"
-      Correo__ImapHost: "192.168.1.11"
+      Correo__ImapHost: "mailserver"
       Correo__ImapPuerto: "143"
       Correo__MasterUser: "sistema-reportes"
       Correo__MasterPassword: "selena"
+      Correo__MasterUserIncluyeDominio: "true"
       TZ: "America/La_Paz"
     ports:
       - "5005:80"
-
+      
   # ─── Gateway ─────────────────────────────────────────
   ms-gateway:
     build:
@@ -216,8 +218,54 @@ services:
     ports:
       - "4200:80"
 
+  # ─── Servidor de correo (docker-mailserver) ─────────
+  mailserver:
+    image: docker.io/mailserver/docker-mailserver:latest
+    container_name: mailserver
+    hostname: mail
+    domainname: tecnoweb.net
+    env_file: docker/mailserver/mailserver.env
+    ports:
+      - "2525:25"
+      - "1430:143"
+      - "5870:587"
+      - "9930:993"
+    volumes:
+      - mail-data:/var/mail
+      - mail-state:/var/mail-state
+      - ./docker/mailserver/mail-logs:/var/log/mail
+      - ./docker/mailserver/config:/tmp/docker-mailserver
+    restart: unless-stopped
+    stop_grace_period: 1m
+    cap_add:
+      - NET_ADMIN
+
+  # ─── Roundcube (webmail) ─────────────────────────────
+  roundcube:
+    image: roundcube/roundcubemail:latest
+    container_name: roundcube
+    restart: unless-stopped
+    depends_on:
+      - mailserver
+    environment:
+      ROUNDCUBEMAIL_DEFAULT_HOST: mailserver
+      ROUNDCUBEMAIL_DEFAULT_PORT: 143
+      ROUNDCUBEMAIL_SMTP_SERVER: mailserver
+      ROUNDCUBEMAIL_SMTP_PORT: 587
+      ROUNDCUBEMAIL_SMTP_USER: "%u"
+      ROUNDCUBEMAIL_SMTP_PASS: "%p"
+      ROUNDCUBEMAIL_DB_TYPE: sqlite
+      TZ: "America/La_Paz"
+    volumes:
+      - roundcube-db:/var/roundcube/db
+    ports:
+      - "8080:80"
+
 volumes:
   data-seguridad:
   data-venta:
   data-inventario:
   data-compras:
+  roundcube-db:
+  mail-data:
+  mail-state:

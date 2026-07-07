@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { User } from '../../../interfaces/user.interface';
 import { Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
@@ -19,7 +19,11 @@ export default class LoginComponent implements OnInit {
   user!: User;
   errorMessage: string | null = null;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.user = {
@@ -29,18 +33,19 @@ export default class LoginComponent implements OnInit {
   }
 
   public login(): void {
+    this.errorMessage = null;
     this.authService.getToken(this.user).subscribe(
       (response: User) => {
         console.log('response:', response);
         sessionStorage.setItem("token", response.token || '');
-        sessionStorage.setItem('user', JSON.stringify(response)); // Guardar los datos del usuario en sessionStorage
-        sessionStorage.setItem('roles', JSON.stringify(response.roles)); // Guardar roles
+        sessionStorage.setItem('user', JSON.stringify(response));
+        sessionStorage.setItem('roles', JSON.stringify(response.roles));
         this.redirectToDashboard();
       },
       (error) => {
-        this.errorMessage = error.message;
+        this.errorMessage = error.error?.message || 'Ocurrió un error al iniciar sesión.';
         console.error("Error en login", this.errorMessage);
-        this.router.navigate(['/auth/login']);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -48,5 +53,4 @@ export default class LoginComponent implements OnInit {
   private redirectToDashboard(): void {
     this.router.navigate(['/dashboard']);
   }
-
 }

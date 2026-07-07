@@ -88,5 +88,14 @@ namespace MSVenta.Seguridad.Controllers
 
             return Ok(new { Message = "El usuario es válido." });
         }
+        [HttpPost("{id}/desbloquear")]
+        public async Task<IActionResult> DesbloquearUsuario(int id)
+        {
+            var resultado = await _usuarioService.DesbloquearUsuario(id);
+            if (!resultado)
+                return NotFound(new { message = "Usuario no encontrado." });
+
+            return Ok(new { message = "Usuario desbloqueado correctamente." });
+        }
     }
 }

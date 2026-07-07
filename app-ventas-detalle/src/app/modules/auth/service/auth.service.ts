@@ -44,7 +44,8 @@ export class AuthService {
 
 
   private handleError(error: any) {
-    console.error("AuthService error", error);
-    return throwError(() => new Error("Error de autenticación: " + error.message));
-  }
+  console.error("AuthService error", error);
+  const mensajeBackend = error.error?.message;
+  return throwError(() => ({ error: { message: mensajeBackend } }));
+}
 }

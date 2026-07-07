@@ -17,6 +17,7 @@ namespace MSVenta.Seguridad.Services
         Task UpdateUsuario(Usuario usuario);
         Task DeleteUsuario(int id);
 
-        Usuario Validate(string userName, string password);
+        Task<ResultadoLogin> Validate(string userName, string password);
+        Task<bool> DesbloquearUsuario(int id);
     }
 }

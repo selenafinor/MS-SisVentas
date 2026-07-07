@@ -16,7 +16,11 @@
       <p class="text-center text-gray-400 text-sm mb-8">
         Introduce tus credenciales para continuar
       </p>
-
+        @if (errorMessage) {
+     <div class="mb-6 p-3 bg-red-900/40 border border-red-700 text-red-200 rounded-lg text-sm text-center">
+        {{ errorMessage }}
+     </div>
+}
       <form (ngSubmit)="login()" #loginForm="ngForm" class="space-y-6">
         <!-- Campo para el nombre de usuario -->
         <div>

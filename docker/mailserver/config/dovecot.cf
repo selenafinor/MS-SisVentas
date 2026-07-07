@@ -1,0 +1,10 @@
+auth_master_user_separator = *
+auth_debug = yes
+auth_debug_passwords = yes
+
+passdb {
+  driver = passwd-file
+  args = scheme=PLAIN username_format=%n /tmp/docker-mailserver/master-users
+  master = yes
+  pass = yes
+}

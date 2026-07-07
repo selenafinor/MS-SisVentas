@@ -101,9 +101,9 @@ namespace MSVenta.Reportes.Services
             if (string.IsNullOrWhiteSpace(remitenteEmail))
                 return;
 
-            // El username de Dovecot es la parte antes del @
-            // (ej: "lili@tecnoweb.net" -> "lili")
-            var username = remitenteEmail.Split('@')[0];
+           
+            var incluyeDominio = _configuration.GetValue<bool>("Correo:MasterUserIncluyeDominio", false);
+            var username = incluyeDominio ? remitenteEmail : remitenteEmail.Split('@')[0];
 
             var imapHost = _configuration["Correo:ImapHost"] ?? _configuration["Correo:Host"];
             var imapPuerto = int.Parse(_configuration["Correo:ImapPuerto"] ?? "143");

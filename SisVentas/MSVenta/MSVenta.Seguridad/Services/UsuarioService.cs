@@ -2,6 +2,7 @@
 using MSVenta.Seguridad.DTOs;
 using MSVenta.Seguridad.Models;
 using MSVenta.Seguridad.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,6 +38,7 @@ namespace MSVenta.Seguridad.Services
                 Correo = u.Correo,
                 Telefono = u.Telefono,
                 Estado = u.Estado,
+                BloqueadoHasta = u.BloqueadoHasta,
                 Roles = u.RolPermisoUsuarios
                     .GroupBy(rpu => new { rpu.RolPermiso.Rol.ID_Rol, rpu.RolPermiso.Rol.Nombre_Rol })
                     .Select(group => new RolDTO
@@ -94,6 +96,7 @@ namespace MSVenta.Seguridad.Services
                 Correo = usuario.Correo,
                 Telefono = usuario.Telefono,
                 Estado = usuario.Estado,
+                BloqueadoHasta = usuario.BloqueadoHasta,
                 Roles = roles
             };
 
@@ -138,11 +141,56 @@ namespace MSVenta.Seguridad.Services
             }
         }
 
-        public Usuario Validate(string userName, string password)
+        public async Task<ResultadoLogin> Validate(string userName, string password)
         {
-            return _context.Usuarios
-            .FirstOrDefault(x => x.Username == userName && x.Password == password);
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(x => x.Username == userName);
 
+            if (usuario == null)
+                return new ResultadoLogin { Motivo = MotivoLogin.UsuarioNoExiste };
+
+            if (usuario.BloqueadoHasta.HasValue && usuario.BloqueadoHasta.Value > DateTime.Now)
+                return new ResultadoLogin
+                {
+                    Motivo = MotivoLogin.CuentaBloqueada,
+                    BloqueadoHasta = usuario.BloqueadoHasta
+                };
+
+            if (usuario.Estado != "activo")
+                return new ResultadoLogin { Motivo = MotivoLogin.CuentaInactiva };
+
+            if (usuario.Password != password)
+            {
+                usuario.IntentosFallidos++;
+
+                if (usuario.IntentosFallidos >= 5)
+                {
+                    usuario.BloqueadoHasta = DateTime.Now.AddMinutes(5);
+                    usuario.IntentosFallidos = 0;
+                }
+
+                await _context.SaveChangesAsync();
+
+                return new ResultadoLogin { Motivo = MotivoLogin.PasswordIncorrecta };
+            }
+
+            usuario.IntentosFallidos = 0;
+            usuario.BloqueadoHasta = null;
+            await _context.SaveChangesAsync();
+
+            return new ResultadoLogin { Motivo = MotivoLogin.Exitoso, Usuario = usuario };
+        }
+        public async Task<bool> DesbloquearUsuario(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
+                return false;
+
+            usuario.IntentosFallidos = 0;
+            usuario.BloqueadoHasta = null;
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         //public bool Validate(string userName, string password)
