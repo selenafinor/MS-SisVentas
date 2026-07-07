@@ -11,13 +11,13 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardLayoutComponent,
     children: [
-       {
+      {
         path: 'inicio',
         loadChildren: () =>
           import('./modules/dashboard-resumen/dashboard-resumen.route').then(m => m.dashboard_resumen_routes),
         data: { icon: 'pi pi-home', title: 'Inicio', description: 'Resumen general del sistema', permission: 'Dashboard' }
       },
-      { 
+      {
         path: 'roles',
         loadChildren: () =>
           import('./modules/rol/rol.route').then(m => m.rol_routes),
@@ -43,8 +43,8 @@ export const routes: Routes = [
       },
       {
         path: 'permisos',
-          loadChildren: () =>
-           import('./modules/permisos/permiso.route').then(m => m.permisos_routes),
+        loadChildren: () =>
+          import('./modules/permisos/permiso.route').then(m => m.permisos_routes),
         data: { icon: 'pi pi-key', title: 'Permisos', description: 'Gestion de Permisos', permission: 'Permiso' }
       },
       {
@@ -83,14 +83,13 @@ export const routes: Routes = [
           import('./modules/sale/sale.route').then(m => m.sale_routes),
         data: { icon: 'pi pi-cart-plus', title: 'Venta', description: 'Gestion de Ventas', permission: 'Venta' }
       },
-      { 
-        
+      {
         path: 'compra',
         loadChildren: () =>
           import('./modules/compra/compra.route').then(m => m.compra_routes),
         data: { icon: 'pi pi-truck', title: 'Compras', description: 'Gestion de Compras', permission: 'Compra' }
       },
-      { 
+      {
         path: 'ingreso',
         loadChildren: () =>
           import('./modules/inventario/ingreso/ingreso.route').then(m => m.ingreso_routes),
@@ -108,11 +107,11 @@ export const routes: Routes = [
           import('./modules/inventario/traspaso/traspaso.route').then(m => m.traspaso_routes),
         data: { icon: 'pi pi-file-pdf', title: 'Traspaso', description: 'Gestion de Traspasos', permission: 'Traspaso' }
       },
-   {
-        path: 'inicio',
+      {
+        path: 'reportes',
         loadChildren: () =>
-          import('./modules/dashboard-resumen/dashboard-resumen.route').then(m => m.dashboard_resumen_routes),
-        data: { icon: 'pi pi-home', title: 'Inicio', description: 'Resumen general del sistema' }
+          import('./modules/reportes/reportes.route').then(m => m.reportes_routes),
+        data: { icon: 'pi pi-chart-bar', title: 'Reportes', description: 'Gestion de Reportes', permission: 'ver_reportes' }
       },
     ],
   },
