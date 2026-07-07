@@ -7,7 +7,7 @@ namespace MSVenta.Venta.Services
 {
     public class RabbitMqPublisher
     {
-        private const string HostName = "localhost";
+        private static readonly string HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost";
         private const string UserName = "sisventas";
         private const string Password = "ect*123";
         private const string ExchangeName = "ventas_exchange";

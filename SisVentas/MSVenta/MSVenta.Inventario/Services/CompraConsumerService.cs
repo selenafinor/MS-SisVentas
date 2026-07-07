@@ -16,7 +16,7 @@ namespace MSVenta.Inventario.Services
 {
     public class CompraConsumerService : BackgroundService
     {
-        private const string HostName = "localhost";
+        private static readonly string HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost";
         private const string UserName = "sisventas";
         private const string Password = "ect*123";
         private const string ExchangeName = "compras_exchange";

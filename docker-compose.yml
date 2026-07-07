@@ -1,0 +1,223 @@
+services:
+
+  # ─── MySQL: Seguridad ──────────────────────────────
+  db-seguridad:
+    image: mysql:8.0
+    container_name: db-seguridad
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "ect*123"
+      MYSQL_DATABASE: db_security
+    ports:
+      - "3310:3306"
+    volumes:
+      - data-seguridad:/var/lib/mysql
+      - ./SisVentas/docker/init-sql/seguridad:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pect*123"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ─── MySQL: Venta ──────────────────────────────────
+  db-venta:
+    image: mysql:8.0
+    container_name: db-venta
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "ect*123"
+      MYSQL_DATABASE: db_ventas
+    ports:
+      - "3311:3306"
+    volumes:
+      - data-venta:/var/lib/mysql
+      - ./SisVentas/docker/init-sql/venta:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pect*123"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ─── MySQL: Inventario ─────────────────────────────
+  db-inventario:
+    image: mysql:8.0
+    container_name: db-inventario
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "ect*123"
+      MYSQL_DATABASE: db_inventario
+    ports:
+      - "3312:3306"
+    volumes:
+      - data-inventario:/var/lib/mysql
+      - ./SisVentas/docker/init-sql/inventario:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pect*123"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ─── PostgreSQL: Compras ───────────────────────────
+  db-compras:
+    image: postgres:18
+    container_name: db-compras
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: db_compras
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "ect*123"
+    ports:
+      - "5436:5432"
+    volumes:
+      - data-compras:/var/lib/postgresql
+      - ./SisVentas/docker/init-sql/compra:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db_compras"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # RabbitMQ: se usa el contenedor "rabbitmq" ya existente en tu Docker
+  # (creado previamente, puertos 5672/15672 ya en uso). No se define aquí
+  # para no chocar con él; los microservicios se conectarán a ese mismo contenedor.
+
+  # ─── Microservicio: Seguridad ──────────────────────
+  ms-seguridad:
+    build:
+      context: ./SisVentas/MSVenta/MSVenta.Seguridad
+    container_name: ms-seguridad
+    restart: unless-stopped
+    depends_on:
+      db-seguridad:
+        condition: service_healthy
+    environment:
+      mysql__cn: "server=db-seguridad;port=3306;database=db_security;user=root;password=ect*123"
+      jwt__enabled: "true"
+      jwt__issuer: "http://edwin.com"
+      jwt__audience: "web"
+      jwt__key: "CLave#12548MIentrasMas45566Mejor____%%%dddd"
+      jwt__expiration: "30"
+      TZ: "America/La_Paz"
+    ports:
+      - "5001:80"
+
+  # ─── Microservicio: Venta ───────────────────────────
+  ms-venta:
+    build:
+      context: ./SisVentas/MSVenta/MSVenta.Venta
+    container_name: ms-venta
+    restart: unless-stopped
+    depends_on:
+      db-venta:
+        condition: service_healthy
+      ms-seguridad:
+        condition: service_started
+    environment:
+      mysql__cn: "server=db-venta;port=3306;database=db_ventas;user=root;password=ect*123"
+      proxy__urlSecurity: "http://ms-seguridad:80/api/usuario"
+      RABBITMQ_HOST: "rabbitmq"
+      TZ: "America/La_Paz"
+    ports:
+      - "5002:80"
+
+  # ─── Microservicio: Inventario ──────────────────────
+  ms-inventario:
+    build:
+      context: ./SisVentas/MSVenta/MSVenta.Inventario
+    container_name: ms-inventario
+    restart: unless-stopped
+    depends_on:
+      db-inventario:
+        condition: service_healthy
+      ms-seguridad:
+        condition: service_started
+    environment:
+      mysql__cn: "server=db-inventario;port=3306;database=db_inventario;user=root;password=ect*123"
+      proxy__urlSecurity: "http://ms-seguridad:80/api/usuario"
+      RABBITMQ_HOST: "rabbitmq"
+      TZ: "America/La_Paz"
+    ports:
+      - "5003:80"
+
+  # ─── Microservicio: Compras ─────────────────────────
+  ms-compras:
+    build:
+      context: ./SisVentas/MSVenta/MSVenta.Compras
+    container_name: ms-compras
+    restart: unless-stopped
+    depends_on:
+      db-compras:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db-compras;Port=5432;Database=db_compras;Username=postgres;Password=ect*123"
+      RABBITMQ_HOST: "rabbitmq"
+      TZ: "America/La_Paz"
+    ports:
+      - "5004:80"
+
+  # ─── Microservicio: Reportes ────────────────────────
+  ms-reportes:
+    build:
+      context: ./SisVentas/MSVenta/MSVenta.Reportes
+    container_name: ms-reportes
+    restart: unless-stopped
+    depends_on:
+      - ms-venta
+      - ms-compras
+      - ms-inventario
+    environment:
+      MicroserviciosUrl__Ventas: "http://ms-venta:80"
+      MicroserviciosUrl__Compras: "http://ms-compras:80"
+      MicroserviciosUrl__Inventario: "http://ms-inventario:80"
+      Correo__Host: "192.168.1.11"
+      Correo__Puerto: "25"
+      Correo__UsarSsl: "false"
+      Correo__RequiereAutenticacion: "false"
+      Correo__RemitenteName: "Sistema de Ventas"
+      Correo__RemitenteEmail: "sistema@tecnoweb.net"
+      Correo__ImapHost: "192.168.1.11"
+      Correo__ImapPuerto: "143"
+      Correo__MasterUser: "sistema-reportes"
+      Correo__MasterPassword: "selena"
+      TZ: "America/La_Paz"
+    ports:
+      - "5005:80"
+
+  # ─── Gateway ─────────────────────────────────────────
+  ms-gateway:
+    build:
+      context: ./SisVentas/MSVenta/MSVenta.Gateway
+    container_name: ms-gateway
+    restart: unless-stopped
+    depends_on:
+      - ms-seguridad
+      - ms-venta
+      - ms-inventario
+      - ms-compras
+      - ms-reportes
+    environment:
+      jwt__enabled: "true"
+      jwt__issuer: "http://edwin.com"
+      jwt__audience: "web"
+      jwt__key: "CLave#12548MIentrasMas45566Mejor____%%%dddd"
+      jwt__expiration: "30"
+      TZ: "America/La_Paz"
+    ports:
+      - "5000:80"
+
+  # ─── Frontend Angular ───────────────────────────────
+  frontend:
+    build:
+      context: ./app-ventas-detalle
+    container_name: frontend
+    restart: unless-stopped
+    depends_on:
+      - ms-gateway
+    ports:
+      - "4200:80"
+
+volumes:
+  data-seguridad:
+  data-venta:
+  data-inventario:
+  data-compras:

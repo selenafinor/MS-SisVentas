@@ -1,11 +1,12 @@
 ﻿using RabbitMQ.Client;
+using System;
 using System.Text;
 using System.Text.Json;
 namespace MSVenta.Compras.Services
 {
     public class RabbitMqPublisher
     {
-        private const string HostName = "localhost";
+        private static readonly string HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost";
         private const string UserName = "sisventas";
         private const string Password = "ect*123";
         private const string ExchangeNameCompra = "compras_exchange";

@@ -5,8 +5,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "ms-seguridad",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/token",
@@ -17,8 +17,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "ms-seguridad",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/usuario",
@@ -33,8 +33,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "ms-seguridad",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/usuario/{id}",
@@ -49,8 +49,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "ms-seguridad",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/roles",
@@ -65,8 +65,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "ms-seguridad",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/roles/{id}",
@@ -81,8 +81,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "ms-seguridad",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/permiso",
@@ -97,8 +97,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "ms-seguridad",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/rolpermisos",
@@ -113,8 +113,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "ms-seguridad",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/rolpermisos/{id}",
@@ -129,8 +129,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "ms-seguridad",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/rolpermisousuarios",
@@ -145,8 +145,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/producto",
@@ -161,8 +161,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/producto/{id_producto}",
@@ -177,8 +177,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/categoria",
@@ -193,8 +193,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/categoria/{id}",
@@ -209,8 +209,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/almacen",
@@ -225,8 +225,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/venta",
@@ -241,8 +241,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/venta/{id}",
@@ -257,8 +257,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/detalleventa",
@@ -273,8 +273,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/detalleventa/{id}",
@@ -289,8 +289,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/productoalmacen",
@@ -305,8 +305,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/productoalmacen/{productoId}/{almacenId}",
@@ -321,8 +321,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/cliente",
@@ -337,8 +337,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/cliente/{id}",
@@ -353,8 +353,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/articulo",
@@ -369,8 +369,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/articulo/{id}",
@@ -385,8 +385,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/inventario/almacen",
@@ -401,8 +401,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/inventario/almacen/{id}",
@@ -417,8 +417,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/ingreso",
@@ -433,8 +433,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/ingreso/{id}",
@@ -449,8 +449,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/egreso",
@@ -465,8 +465,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/egreso/{id}",
@@ -481,8 +481,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/traspaso",
@@ -497,8 +497,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/traspaso/{id}",
@@ -513,8 +513,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/DetalleIngreso",
@@ -529,8 +529,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/DetalleIngreso/{id}",
@@ -545,8 +545,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/DetalleIngreso/ingreso/{ingresoId}",
@@ -561,8 +561,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/ArticuloAlmacen",
@@ -577,8 +577,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/ArticuloAlmacen/{id}",
@@ -593,8 +593,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/DetalleEgreso",
@@ -609,8 +609,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/DetalleEgreso/{id}",
@@ -625,8 +625,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/DetalleEgreso/egreso/{egresoId}",
@@ -641,8 +641,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/DetalleTraspaso",
@@ -657,8 +657,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/DetalleTraspaso/{id}",
@@ -673,8 +673,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/DetalleTraspaso/traspaso/{traspasoId}",
@@ -689,8 +689,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "ms-inventario",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/Articulo/upload/{id}",
@@ -705,8 +705,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "ms-seguridad",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/roles/conpermisos",
@@ -721,8 +721,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/venta/{id}/detalle",
@@ -737,8 +737,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/venta/{id}/cancelar",
@@ -753,8 +753,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/venta/{id}/confirmar",
@@ -769,8 +769,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/cliente/buscar/{termino}",
@@ -785,8 +785,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/cliente/{id}/toggle",
@@ -801,8 +801,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/venta/{id}/generarQr",
@@ -817,8 +817,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/venta/{id}/estadoPago",
@@ -833,8 +833,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/pago/callback",
@@ -845,8 +845,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "ms-venta",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/venta/{id}/confirmar-stock",
@@ -861,8 +861,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/proveedor",
@@ -877,8 +877,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/proveedor/{id}",
@@ -893,8 +893,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/proveedor/{id}/toggle",
@@ -909,8 +909,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/notacompra",
@@ -925,8 +925,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/notacompra/{id}",
@@ -941,8 +941,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/notacompra/{id}/detalle",
@@ -957,8 +957,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/notacompra/{id}/confirmar-stock",
@@ -973,8 +973,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/notacompra/{id}/cancelar",
@@ -989,8 +989,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/catalogoproveedor",
@@ -1005,8 +1005,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/catalogoproveedor/{id}",
@@ -1021,8 +1021,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/catalogoproveedor/proveedor/{proveedorId}",
@@ -1037,8 +1037,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/ordencompra",
@@ -1053,8 +1053,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/ordencompra/{id}",
@@ -1069,8 +1069,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/ordencompra/{id}/detalle",
@@ -1085,8 +1085,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/ordencompra/detalle/{idDetalle}",
@@ -1101,8 +1101,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/ordencompra/{id}/estado",
@@ -1117,8 +1117,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/catalogoproveedor/producto/{productoId}",
@@ -1133,8 +1133,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/adquisicion",
@@ -1149,8 +1149,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/adquisicion/{id}",
@@ -1165,8 +1165,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/adquisicion/{id}/detalle",
@@ -1181,8 +1181,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "ms-compras",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/adquisicion/{id}/confirmar-stock",
@@ -1197,8 +1197,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5005
+          "Host": "ms-reportes",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/reporte/ventas",
@@ -1213,8 +1213,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5005
+          "Host": "ms-reportes",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/reporte/compras",
@@ -1229,8 +1229,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5005
+          "Host": "ms-reportes",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/reporte/inventario",
@@ -1245,8 +1245,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5005
+          "Host": "ms-reportes",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/reporte/movimientos",
@@ -1261,8 +1261,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5005
+          "Host": "ms-reportes",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/reporte/ventas/pdf",
@@ -1277,8 +1277,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5005
+          "Host": "ms-reportes",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/reporte/compras/pdf",
@@ -1293,8 +1293,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5005
+          "Host": "ms-reportes",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/reporte/inventario/pdf",
@@ -1309,11 +1309,27 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5005
+          "Host": "ms-reportes",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/reporte/movimientos/pdf",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/reporte/dashboard",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ms-reportes",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/reporte/dashboard",
       "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "SECURITY-TOKEN",
@@ -1325,8 +1341,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5005
+          "Host": "ms-reportes",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/reporte/enviar-correo",
@@ -1335,26 +1351,9 @@
         "AuthenticationProviderKey": "SECURITY-TOKEN",
         "AllowedScopes": []
       }
-    },
-    {
-      "DownstreamPathTemplate": "/api/reporte/dashboard",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5005
-        }
-      ],
-      "UpstreamPathTemplate": "/api/reporte/dashboard",
-      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "SECURITY-TOKEN",
-        "AllowedScopes": []
-      }
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5000"
-    
+    "BaseUrl": "http://ms-gateway"
   }
 }
