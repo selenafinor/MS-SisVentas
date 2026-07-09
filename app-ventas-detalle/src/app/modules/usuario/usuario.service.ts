@@ -92,7 +92,6 @@ desbloquearUsuario(id: number): Observable<any> {
   const token = sessionStorage.getItem('token');
   if (!token) return of(null);
   return this.http
-    .post<any>(`${this.apiUrl}/${id}/desbloquear`, {}, httpOptions(token))
-    .pipe(catchError(this.handleError('desbloquearUsuario', null)));
+    .post<any>(`${this.apiUrl}/${id}/desbloquear`, {}, httpOptions(token));
 }
 }

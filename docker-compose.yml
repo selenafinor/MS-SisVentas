@@ -136,9 +136,10 @@ services:
       proxy__urlSecurity: "http://ms-seguridad:80/api/usuario"
       RABBITMQ_HOST: "rabbitmq"
       TZ: "America/La_Paz"
+    volumes:
+      - inventario-uploads:/app/wwwroot/uploads
     ports:
       - "5003:80"
-
   # ─── Microservicio: Compras ─────────────────────────
   ms-compras:
     build:
@@ -282,3 +283,4 @@ volumes:
   roundcube-db:
   mail-data:
   mail-state:
+  inventario-uploads:
