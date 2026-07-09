@@ -141,6 +141,22 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/rolpermisousuarios/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ms-seguridad",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/rolpermisousuarios/{id}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SECURITY-TOKEN",
+        "AllowedScopes": []
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/producto",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

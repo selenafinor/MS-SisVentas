@@ -39,6 +39,20 @@ namespace MSVenta.Seguridad.Controllers
             return CreatedAtAction(nameof(GetRolPermisoUsuarios), new { id = createdRolPermisoUsuario.ID_Usuario_Rol_Permiso }, createdRolPermisoUsuario);
         }
 
+        // ANTES este endpoint no existia: el frontend nunca podia borrar una
+        // asignacion rol-usuario anterior, por eso al "cambiar" el rol de un
+        // usuario en realidad se iba acumulando uno nuevo encima del viejo.
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRolPermisoUsuario(int id)
+        {
+            var existente = await _rolPermisoUsuarioService.GetRolPermisoUsuarioById(id);
+            if (existente == null)
+                return NotFound();
+
+            await _rolPermisoUsuarioService.DeleteRolPermisoUsuario(id);
+            return NoContent();
+        }
+
         public IActionResult Index()
         {
             return View();

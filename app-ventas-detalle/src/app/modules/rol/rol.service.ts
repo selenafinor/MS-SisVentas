@@ -86,12 +86,25 @@ export class RolService {
       .pipe(catchError(this.handleError('deleteRolPermiso', id_rolpermiso)));
   }
 
+  // OJO: antes esta URL era "/rolpermisousuario" (singular) y no coincidia
+  // con la ruta real del backend/Ocelot ("/rolpermisousuarios", plural),
+  // asi que esta llamada probablemente fallaba en silencio (el catchError
+  // devuelve [] y no se ve el error en pantalla).
   getRolPermisoUsuario(): Observable<RolPermisoUsuario[]> {
-    const urlRolUsuario = `${environment.URL_SERVICIOS}/rolpermisousuario`;
+    const urlRolUsuario = `${environment.URL_SERVICIOS}/rolpermisousuarios`;
     const token = sessionStorage.getItem('token');
     if (!token) return of([]);
     return this.http.get<RolPermisoUsuario[]>(urlRolUsuario, httpOptions(token))
       .pipe(catchError(this.handleError('getRolPermisoUsuario', [])));
+  }
+
+  // Trae solo las asignaciones rol-permiso del usuario indicado.
+  // Se filtra en el cliente porque el backend no tiene un endpoint
+  // "por usuario" dedicado (GET /rolpermisousuarios/usuario/{id}).
+  getRolPermisoUsuarioByUsuario(userId: number): Observable<RolPermisoUsuario[]> {
+    return this.getRolPermisoUsuario().pipe(
+      catchError(this.handleError('getRolPermisoUsuarioByUsuario', [] as RolPermisoUsuario[]))
+    ) as unknown as Observable<RolPermisoUsuario[]>;
   }
 
   createRolUsuario(rolusuario: RolPermisoUsuario): Observable<RolPermisoUsuario> {
@@ -103,15 +116,19 @@ export class RolService {
   }
 
   getRolUsuarioById(id: number): Observable<RolPermisoUsuario> {
-    const urlRolUsuario = `${environment.URL_SERVICIOS}/rolpermisousuario/${id}`;
+    const urlRolUsuario = `${environment.URL_SERVICIOS}/rolpermisousuarios/${id}`;
     const token = sessionStorage.getItem('token');
     if (!token) return of({} as RolPermisoUsuario);
     return this.http.get<RolPermisoUsuario>(urlRolUsuario, httpOptions(token))
       .pipe(catchError(this.handleError('getRolUsuarioById', {} as RolPermisoUsuario)));
   }
 
+  // Antes esta URL apuntaba a "/rolpermisousuario/{id}" (singular) Y el
+  // backend ni siquiera exponia un endpoint DELETE: aunque el frontend
+  // llamara esto, siempre fallaba y las asignaciones viejas nunca se
+  // borraban. Ya se corrigio en el Controller y en Ocelot.
   deleteRolUsuario(id_rolusuario?: number): Observable<any> {
-    const urlRolUsuario = `${environment.URL_SERVICIOS}/rolpermisousuario/${id_rolusuario}`;
+    const urlRolUsuario = `${environment.URL_SERVICIOS}/rolpermisousuarios/${id_rolusuario}`;
     const token = sessionStorage.getItem('token');
     if (!token) return of({} as RolPermisoUsuario);
     return this.http.delete<any>(urlRolUsuario, httpOptions(token))

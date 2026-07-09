@@ -76,18 +76,36 @@ export class UsuarioGestionarComponent implements OnInit {
       return;
     }
 
-   const asignaciones = rolPermisos.map(rp =>
-  this.rolService.createRolUsuario({
-    userId: this.userId,
-    iD_Rol_Permiso: rp.iD_Rol_Permiso!
-  }).toPromise()
-);
+    // 🔹 1. Antes de asignar el rol nuevo, borramos las asignaciones
+    // (RolPermisoUsuario) que el usuario ya tenía. Sin este paso, el
+    // rol nuevo se suma al viejo en vez de reemplazarlo.
+    this.rolService.getRolPermisoUsuario().toPromise().then((todas) => {
+      const asignacionesDelUsuario = (todas || []).filter(
+        (a) => a.userId === this.userId
+      );
 
+      const eliminaciones = asignacionesDelUsuario.map((a) =>
+        this.rolService.deleteRolUsuario(a.iD_Usuario_Rol_Permiso).toPromise()
+          .catch((err) => console.error('Error al borrar asignación previa:', err))
+      );
 
-    Promise.all(asignaciones).then(() => {
+      return Promise.all(eliminaciones);
+    }).then(() => {
+      // 🔹 2. Recién ahora creamos las asignaciones del rol nuevo
+      const asignaciones = rolPermisos.map(rp =>
+        this.rolService.createRolUsuario({
+          userId: this.userId,
+          iD_Rol_Permiso: rp.iD_Rol_Permiso!
+        }).toPromise()
+      );
+      return Promise.all(asignaciones);
+    }).then(() => {
       Swal.fire('¡Asignado!', 'Rol asignado correctamente.', 'success');
       this.cdr.markForCheck();
-    }).catch(err => console.error(err));
+    }).catch(err => {
+      console.error(err);
+      Swal.fire('Error', 'Ocurrió un error al asignar el rol.', 'error');
+    });
   }
 
  guardarDatos(): void {
